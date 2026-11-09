@@ -1,0 +1,31 @@
+{
+  "minWidth": 400,
+  "licenseWhitelist": ["CC0-1.0", "PDM", "CC-BY-4.0", "CC-BY-3.0", "PIXABAY", "UNSPLASH"],
+  "categories": [
+    {
+      "category": "ghosts",
+      "queries": ["halloween ghost"],
+      "sources": ["openverse", "wikimedia"],
+      "limit": 20
+    },
+    {
+      "category": "pumpkins",
+      "queries": ["jack-o-lantern", "halloween pumpkin"],
+      "sources": ["openverse", "wikimedia"],
+      "limit": 20
+    },
+    { "category": "bats", "queries": ["bat silhouette"], "sources": ["openverse"], "limit": 10 },
+    {
+      "category": "webs",
+      "queries": ["spider web"],
+      "sources": ["openverse", "wikimedia"],
+      "limit": 10
+    },
+    {
+      "category": "scenery",
+      "queries": ["haunted house", "graveyard", "full moon"],
+      "sources": ["openverse", "wikimedia"],
+      "limit": 10
+    }
+  ]
+}

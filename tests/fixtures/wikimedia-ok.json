@@ -1,0 +1,55 @@
+{
+  "query": {
+    "pages": {
+      "101": {
+        "title": "File:Old graveyard.jpg",
+        "imageinfo": [
+          {
+            "url": "https://upload.example.org/graveyard.jpg",
+            "descriptionurl": "https://commons.example.org/wiki/File:Old_graveyard.jpg",
+            "width": 2000,
+            "height": 1500,
+            "extmetadata": {
+              "LicenseShortName": { "value": "CC BY 4.0" },
+              "LicenseUrl": { "value": "https://creativecommons.org/licenses/by/4.0" },
+              "Artist": {
+                "value": "<a href=\"//commons.example.org/wiki/User:Eve\">Eve Photo</a>"
+              },
+              "ObjectName": { "value": "Old graveyard" }
+            }
+          }
+        ]
+      },
+      "102": {
+        "title": "File:Full moon.png",
+        "imageinfo": [
+          {
+            "url": "https://upload.example.org/moon.png",
+            "descriptionurl": "https://commons.example.org/wiki/File:Full_moon.png",
+            "width": 1200,
+            "height": 1200,
+            "extmetadata": {
+              "LicenseShortName": { "value": "Public domain" },
+              "Artist": { "value": "NASA" }
+            }
+          }
+        ]
+      },
+      "103": {
+        "title": "File:Share alike.jpg",
+        "imageinfo": [
+          {
+            "url": "https://upload.example.org/sa.jpg",
+            "descriptionurl": "https://commons.example.org/wiki/File:Share_alike.jpg",
+            "width": 1000,
+            "height": 1000,
+            "extmetadata": {
+              "LicenseShortName": { "value": "CC BY-SA 4.0" },
+              "Artist": { "value": "Fay" }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

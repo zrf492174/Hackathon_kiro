@@ -1,0 +1,258 @@
+{
+  "version": 1,
+  "generatedAt": "2026-11-09T14:15:35.367Z",
+  "assets": [
+    {
+      "id": "placeholder-bat",
+      "type": "image",
+      "category": "bats",
+      "file": "placeholders/bat.svg",
+      "width": 100,
+      "height": 100,
+      "bytes": 282,
+      "hasAlpha": true,
+      "sha256": "2d3c5e4b8ab88f852be3ba24f15ac63bbb45ce470c99a777e3de6ed9e64e51e9",
+      "source": {
+        "provider": "self",
+        "pageUrl": "https://github.com/zrf492174/Hackathon_kiro",
+        "downloadUrl": "placeholders/bat.svg",
+        "fetchedAt": "2026-11-09T14:15:35.367Z"
+      },
+      "author": "Haunted Hollow contributors",
+      "title": "Placeholder bat",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "attributionRequired": false,
+      "modified": false,
+      "tags": [
+        "placeholder",
+        "bat"
+      ],
+      "status": "approved"
+    },
+    {
+      "id": "placeholder-cobweb",
+      "type": "image",
+      "category": "webs",
+      "file": "placeholders/cobweb.svg",
+      "width": 100,
+      "height": 100,
+      "bytes": 324,
+      "hasAlpha": true,
+      "sha256": "85ae5e7c0d2ff30fa3d9e4237ab1aa68e1cd68a50fd33544fd24b6d5effc333f",
+      "source": {
+        "provider": "self",
+        "pageUrl": "https://github.com/zrf492174/Hackathon_kiro",
+        "downloadUrl": "placeholders/cobweb.svg",
+        "fetchedAt": "2026-11-09T14:15:35.367Z"
+      },
+      "author": "Haunted Hollow contributors",
+      "title": "Placeholder cobweb",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "attributionRequired": false,
+      "modified": false,
+      "tags": [
+        "placeholder",
+        "cobweb"
+      ],
+      "status": "approved"
+    },
+    {
+      "id": "placeholder-eyes",
+      "type": "image",
+      "category": "scenery",
+      "file": "placeholders/eyes.svg",
+      "width": 100,
+      "height": 100,
+      "bytes": 347,
+      "hasAlpha": true,
+      "sha256": "7470420a8e8fc75b5528301ef40728115b312c4968dcce808e46b7facda68c4b",
+      "source": {
+        "provider": "self",
+        "pageUrl": "https://github.com/zrf492174/Hackathon_kiro",
+        "downloadUrl": "placeholders/eyes.svg",
+        "fetchedAt": "2026-11-09T14:15:35.367Z"
+      },
+      "author": "Haunted Hollow contributors",
+      "title": "Placeholder eyes",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "attributionRequired": false,
+      "modified": false,
+      "tags": [
+        "placeholder",
+        "eyes"
+      ],
+      "status": "approved"
+    },
+    {
+      "id": "placeholder-ghost",
+      "type": "image",
+      "category": "ghosts",
+      "file": "placeholders/ghost.svg",
+      "width": 100,
+      "height": 100,
+      "bytes": 345,
+      "hasAlpha": true,
+      "sha256": "1915c5b993b88870b52e4f38d3b65553450e51aed2f0ea648a135b9b21bc7c53",
+      "source": {
+        "provider": "self",
+        "pageUrl": "https://github.com/zrf492174/Hackathon_kiro",
+        "downloadUrl": "placeholders/ghost.svg",
+        "fetchedAt": "2026-11-09T14:15:35.367Z"
+      },
+      "author": "Haunted Hollow contributors",
+      "title": "Placeholder ghost",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "attributionRequired": false,
+      "modified": false,
+      "tags": [
+        "placeholder",
+        "ghost"
+      ],
+      "status": "approved"
+    },
+    {
+      "id": "placeholder-moon",
+      "type": "image",
+      "category": "scenery",
+      "file": "placeholders/moon.svg",
+      "width": 100,
+      "height": 100,
+      "bytes": 314,
+      "hasAlpha": true,
+      "sha256": "5410bf12f15ba966933911f5533002b92a6af98adaa0f596fc9c3cf12ec62c4a",
+      "source": {
+        "provider": "self",
+        "pageUrl": "https://github.com/zrf492174/Hackathon_kiro",
+        "downloadUrl": "placeholders/moon.svg",
+        "fetchedAt": "2026-11-09T14:15:35.367Z"
+      },
+      "author": "Haunted Hollow contributors",
+      "title": "Placeholder moon",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "attributionRequired": false,
+      "modified": false,
+      "tags": [
+        "placeholder",
+        "moon"
+      ],
+      "status": "approved"
+    },
+    {
+      "id": "placeholder-pumpkin-off",
+      "type": "image",
+      "category": "pumpkins",
+      "file": "placeholders/pumpkin-off.svg",
+      "width": 100,
+      "height": 100,
+      "bytes": 402,
+      "hasAlpha": true,
+      "sha256": "5b878dc92da559de8531d169ee5eb1037e76546d59a22b3961fb7fbf5c715fdf",
+      "source": {
+        "provider": "self",
+        "pageUrl": "https://github.com/zrf492174/Hackathon_kiro",
+        "downloadUrl": "placeholders/pumpkin-off.svg",
+        "fetchedAt": "2026-11-09T14:15:35.367Z"
+      },
+      "author": "Haunted Hollow contributors",
+      "title": "Placeholder pumpkin-off",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "attributionRequired": false,
+      "modified": false,
+      "tags": [
+        "placeholder",
+        "pumpkin-off"
+      ],
+      "status": "approved"
+    },
+    {
+      "id": "placeholder-pumpkin-on",
+      "type": "image",
+      "category": "pumpkins",
+      "file": "placeholders/pumpkin-on.svg",
+      "width": 100,
+      "height": 100,
+      "bytes": 400,
+      "hasAlpha": true,
+      "sha256": "2964e0b1b478f4d877afad0cf674995295c832c737f234b810a8648416a02ab1",
+      "source": {
+        "provider": "self",
+        "pageUrl": "https://github.com/zrf492174/Hackathon_kiro",
+        "downloadUrl": "placeholders/pumpkin-on.svg",
+        "fetchedAt": "2026-11-09T14:15:35.367Z"
+      },
+      "author": "Haunted Hollow contributors",
+      "title": "Placeholder pumpkin-on",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "attributionRequired": false,
+      "modified": false,
+      "tags": [
+        "placeholder",
+        "pumpkin-on"
+      ],
+      "status": "approved"
+    },
+    {
+      "id": "placeholder-spider",
+      "type": "image",
+      "category": "webs",
+      "file": "placeholders/spider.svg",
+      "width": 100,
+      "height": 100,
+      "bytes": 501,
+      "hasAlpha": true,
+      "sha256": "1d5360b60d30556d13ff947123405cca69fc041be09020eb07e55abb3acb774b",
+      "source": {
+        "provider": "self",
+        "pageUrl": "https://github.com/zrf492174/Hackathon_kiro",
+        "downloadUrl": "placeholders/spider.svg",
+        "fetchedAt": "2026-11-09T14:15:35.367Z"
+      },
+      "author": "Haunted Hollow contributors",
+      "title": "Placeholder spider",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "attributionRequired": false,
+      "modified": false,
+      "tags": [
+        "placeholder",
+        "spider"
+      ],
+      "status": "approved"
+    },
+    {
+      "id": "placeholder-tombstone",
+      "type": "image",
+      "category": "scenery",
+      "file": "placeholders/tombstone.svg",
+      "width": 100,
+      "height": 100,
+      "bytes": 307,
+      "hasAlpha": true,
+      "sha256": "6fca56592a9ea2a80e8bb4bd401324d9eecce008c79a3047ef06d6b17f275cdc",
+      "source": {
+        "provider": "self",
+        "pageUrl": "https://github.com/zrf492174/Hackathon_kiro",
+        "downloadUrl": "placeholders/tombstone.svg",
+        "fetchedAt": "2026-11-09T14:15:35.367Z"
+      },
+      "author": "Haunted Hollow contributors",
+      "title": "Placeholder tombstone",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "attributionRequired": false,
+      "modified": false,
+      "tags": [
+        "placeholder",
+        "tombstone"
+      ],
+      "status": "approved"
+    }
+  ]
+}
