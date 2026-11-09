@@ -195,6 +195,20 @@ test('lab voltage control and lever', async ({ page }) => {
   expect(await axeClean(page)).toEqual([]);
 });
 
+test('lab creature sits up above 70 and lies down at 70', async ({ page }) => {
+  await enter(page);
+  await goScene(page, 'Laboratory');
+  const stage = page.locator('.scene-lab');
+  await page.getByRole('button', { name: 'Pull the lever' }).click();
+  await page.getByLabel('Voltage').fill('75');
+  await expect(stage).toHaveClass(/lab--awake/);
+  await expect(page.locator('#live')).toContainText('The creature sits up');
+  await expect(stage).toHaveClass(/lab--walking/, { timeout: 6000 });
+  await page.getByLabel('Voltage').fill('70');
+  await expect(stage).not.toHaveClass(/lab--awake/);
+  await expect(page.locator('#live')).toContainText('lies back down');
+});
+
 test('foggy town reveals a creature and axe passes', async ({ page }) => {
   await enter(page);
   await goScene(page, 'Foggy Town');

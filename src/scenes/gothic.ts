@@ -4,6 +4,7 @@ import { labLever } from '../interactions/labLever';
 import { castleDoor } from '../interactions/castleDoor';
 import { createFigures } from '../interactions/figures';
 import { labControls } from '../interactions/labControls';
+import { labMonster } from '../interactions/labMonster';
 import { LAB_SVG } from './labArt';
 import { createScene } from './scene';
 
@@ -37,7 +38,7 @@ export const castle = createScene(
 export const lab = createScene(
   'scene-lab',
   'The laboratory',
-  [lightning, labLever, labControls],
+  [lightning, labLever, labControls, labMonster],
   `<p class="scene-title">The Laboratory</p><div class="lab">${LAB_SVG}</div>`,
 );
 
