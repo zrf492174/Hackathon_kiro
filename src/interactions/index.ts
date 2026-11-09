@@ -1,0 +1,11 @@
+export { lightning } from './lightning';
+export { eyes } from './eyes';
+export { candles } from './candles';
+export { easterEggs } from './easterEggs';
+export { touch } from './touch';
+export { popupGhost } from './popupGhost';
+export { pumpkin } from './pumpkin';
+export { flashlight } from './flashlight';
+export { cobweb } from './cobweb';
+export { bats } from './bats';
+export type { Interaction, InteractionContext } from './types';

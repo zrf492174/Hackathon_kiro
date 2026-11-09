@@ -1,0 +1,51 @@
+{
+  "result_count": 4,
+  "results": [
+    {
+      "title": "Cute Ghost",
+      "url": "https://example.org/files/ghost1.png",
+      "foreign_landing_url": "https://example.org/photo/1",
+      "creator": "Ann Author",
+      "creator_url": "https://example.org/u/ann",
+      "license": "cc0",
+      "license_version": "1.0",
+      "width": 1024,
+      "height": 1280,
+      "tags": [{ "name": "ghost" }, { "name": "halloween" }]
+    },
+    {
+      "title": "Pumpkin Night",
+      "url": "https://example.org/files/pumpkin.jpg",
+      "foreign_landing_url": "https://example.org/photo/2",
+      "creator": "Bob Maker",
+      "creator_url": null,
+      "license": "by",
+      "license_version": "4.0",
+      "width": 800,
+      "height": 600,
+      "tags": [{ "name": "pumpkin" }]
+    },
+    {
+      "title": "Noncommercial Bat",
+      "url": "https://example.org/files/bat.png",
+      "foreign_landing_url": "https://example.org/photo/3",
+      "creator": "Cy",
+      "license": "by-nc",
+      "license_version": "4.0",
+      "width": 900,
+      "height": 900,
+      "tags": []
+    },
+    {
+      "title": "Anonymous CC BY",
+      "url": "https://example.org/files/anon.png",
+      "foreign_landing_url": "https://example.org/photo/4",
+      "creator": null,
+      "license": "by",
+      "license_version": "3.0",
+      "width": 900,
+      "height": 900,
+      "tags": []
+    }
+  ]
+}

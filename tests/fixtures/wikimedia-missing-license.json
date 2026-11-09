@@ -1,0 +1,30 @@
+{
+  "query": {
+    "pages": {
+      "201": {
+        "title": "File:Mystery.jpg",
+        "imageinfo": [
+          {
+            "url": "https://upload.example.org/m.jpg",
+            "descriptionurl": "https://commons.example.org/wiki/File:Mystery.jpg",
+            "width": 900,
+            "height": 900,
+            "extmetadata": { "Artist": { "value": "Gus" } }
+          }
+        ]
+      },
+      "202": {
+        "title": "File:Unknown.jpg",
+        "imageinfo": [
+          {
+            "url": "https://upload.example.org/u.jpg",
+            "descriptionurl": "https://commons.example.org/wiki/File:Unknown.jpg",
+            "width": 900,
+            "height": 900,
+            "extmetadata": { "LicenseShortName": { "value": "All rights reserved" } }
+          }
+        ]
+      }
+    }
+  }
+}

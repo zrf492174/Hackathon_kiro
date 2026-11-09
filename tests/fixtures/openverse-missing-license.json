@@ -1,0 +1,22 @@
+{
+  "results": [
+    {
+      "title": "No license field",
+      "url": "https://example.org/a.png",
+      "foreign_landing_url": "https://example.org/a",
+      "creator": "Dee",
+      "license": null,
+      "width": 800,
+      "height": 800
+    },
+    {
+      "title": "Empty license",
+      "url": "https://example.org/b.png",
+      "foreign_landing_url": "https://example.org/b",
+      "creator": "Dee",
+      "license": "",
+      "width": 800,
+      "height": 800
+    }
+  ]
+}

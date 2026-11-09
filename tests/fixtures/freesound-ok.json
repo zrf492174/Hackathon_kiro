@@ -1,0 +1,33 @@
+{
+  "results": [
+    {
+      "name": "Creak",
+      "url": "https://freesound.org/s/1/",
+      "username": "sam",
+      "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+      "tags": ["door"],
+      "previews": {
+        "preview-hq-mp3": "https://cdn.freesound.org/1.mp3"
+      }
+    },
+    {
+      "name": "Wail",
+      "url": "https://freesound.org/s/2/",
+      "username": "lee",
+      "license": "http://creativecommons.org/licenses/by/4.0/",
+      "tags": [],
+      "previews": {
+        "preview-lq-mp3": "https://cdn.freesound.org/2.mp3"
+      }
+    },
+    {
+      "name": "NC",
+      "url": "https://freesound.org/s/3/",
+      "username": "x",
+      "license": "http://creativecommons.org/licenses/by-nc/4.0/",
+      "previews": {
+        "preview-hq-mp3": "https://cdn.freesound.org/3.mp3"
+      }
+    }
+  ]
+}
