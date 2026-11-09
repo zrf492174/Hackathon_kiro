@@ -167,8 +167,8 @@
     #000 100%
   );
 }
-[data-safe-mode='true'] .flashlight {
-  background: rgba(0, 0, 0, 0.6);
+.flashlight[hidden] {
+  display: none;
 }
 
 .cobweb {

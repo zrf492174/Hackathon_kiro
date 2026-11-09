@@ -1,3 +1,6 @@
+export const USER_AGENT =
+  'HauntedHollowAssetCollector/0.1 (https://github.com/zrf492174/Hackathon_kiro)';
+
 export interface Candidate {
   provider: string;
   pageUrl: string;

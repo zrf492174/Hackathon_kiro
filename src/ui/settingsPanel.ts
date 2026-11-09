@@ -1,7 +1,7 @@
 import type { SettingsStore } from '../core/settings';
 
 interface Row {
-  key: 'muted' | 'reducedMotion' | 'scaresEnabled' | 'safeMode';
+  key: 'muted' | 'reducedMotion' | 'scaresEnabled' | 'safeMode' | 'flashlight';
   label: string;
 }
 
@@ -9,6 +9,7 @@ const ROWS: Row[] = [
   { key: 'muted', label: 'Mute sound' },
   { key: 'reducedMotion', label: 'Reduce motion' },
   { key: 'scaresEnabled', label: 'Enable jump scares' },
+  { key: 'flashlight', label: 'Flashlight mode (dark page, follows pointer or focus)' },
   { key: 'safeMode', label: 'Safe mode (no scares, no flashing)' },
 ];
 

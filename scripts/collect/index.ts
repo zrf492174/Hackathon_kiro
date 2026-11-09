@@ -1,12 +1,12 @@
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { extname, join, resolve } from 'node:path';
+import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { verifyAssets } from '../verify-assets';
 import { writeCredits } from './credits';
 import { dedupe, sha256 } from './dedupe';
 import { loadManifest, saveManifest, type Manifest, type ManifestAsset } from './manifest';
 import { searchOpenverse } from './sources/openverse';
-import { RateLimitError, type Candidate } from './sources/types';
+import { RateLimitError, USER_AGENT, type Candidate } from './sources/types';
 import { searchWikimedia } from './sources/wikimedia';
 
 export interface Args {
@@ -31,6 +31,22 @@ export function parseArgs(argv: string[]): Args {
     else if (raw.startsWith('--limit=')) args.limit = Number(raw.slice(8));
   }
   return args;
+}
+
+export const MAX_DOWNLOAD_BYTES = 10 * 1024 * 1024;
+
+const TYPE_EXT: Record<string, string> = {
+  'image/jpeg': '.jpg',
+  'image/png': '.png',
+  'image/webp': '.webp',
+  'image/gif': '.gif',
+  'image/svg+xml': '.svg',
+};
+
+/** Map a response content-type to a file extension, or null if it is not an allowed image type. */
+export function extensionForType(type: string | null): string | null {
+  const base = type?.split(';')[0]?.trim().toLowerCase() ?? '';
+  return TYPE_EXT[base] ?? null;
 }
 
 interface Job {
@@ -137,13 +153,18 @@ async function collect(args: Args, root: string): Promise<void> {
     console.log(`${job.source} "${job.query}": ${candidates.length} licensed candidate(s)`);
     if (args.dryRun) continue;
 
-    const fetched: { c: Candidate; bytes: Uint8Array; sha256: string }[] = [];
+    const fetched: { c: Candidate; bytes: Uint8Array; sha256: string; ext: string }[] = [];
     for (const c of candidates) {
       try {
-        const res = await fetch(c.downloadUrl);
+        const res = await fetch(c.downloadUrl, { headers: { 'User-Agent': USER_AGENT } });
         if (!res.ok) continue;
+        const ext = extensionForType(res.headers.get('content-type'));
+        if (!ext) continue;
+        const declared = Number(res.headers.get('content-length') ?? 0);
+        if (declared > MAX_DOWNLOAD_BYTES) continue;
         const bytes = new Uint8Array(await res.arrayBuffer());
-        fetched.push({ c, bytes, sha256: sha256(bytes) });
+        if (bytes.byteLength > MAX_DOWNLOAD_BYTES) continue;
+        fetched.push({ c, bytes, sha256: sha256(bytes), ext });
       } catch {
         continue;
       }
@@ -161,7 +182,7 @@ async function collect(args: Args, root: string): Promise<void> {
     );
     for (const k of kept) {
       if (manifest.assets.some((a) => a.sha256 === k.sha256)) continue;
-      const ext = extname(new URL(k.c.downloadUrl).pathname) || '.bin';
+      const ext = k.ext;
       const rel = `images/${job.category}/${k.c.provider}-${k.sha256.slice(0, 6)}${ext}`;
       mkdirSync(join(assetsDir, 'images', job.category), { recursive: true });
       writeFileSync(join(assetsDir, rel), k.bytes);

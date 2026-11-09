@@ -3,6 +3,8 @@ export interface Settings {
   reducedMotion: boolean;
   scaresEnabled: boolean;
   safeMode: boolean;
+  /** Opt-in dark flashlight overlay. */
+  flashlight: boolean;
 }
 
 export interface StorageLike {
@@ -17,6 +19,7 @@ export const DEFAULT_SETTINGS: Readonly<Settings> = Object.freeze({
   reducedMotion: false,
   scaresEnabled: false,
   safeMode: false,
+  flashlight: false,
 });
 
 export function parseSettings(raw: string | null): Settings {

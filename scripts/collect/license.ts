@@ -1,3 +1,7 @@
+/**
+ * PIXABAY and UNSPLASH are reserved by PLAN.md. No adapter produces them yet, so nothing can
+ * reach the manifest with these ids until those adapters land.
+ */
 export const LICENSE_WHITELIST = [
   'CC0-1.0',
   'PDM',

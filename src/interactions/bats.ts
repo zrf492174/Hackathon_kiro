@@ -52,6 +52,13 @@ export const bats: Interaction = {
       }
       if (flock.length > 0 && !document.hidden) raf = requestAnimationFrame(frame);
     };
+    const unsub = ctx.settings.subscribe(() => {
+      if (allowed()) return;
+      flock = [];
+      if (raf) cancelAnimationFrame(raf);
+      raf = 0;
+      g?.clearRect(0, 0, cv.width, cv.height);
+    });
     const release = (x: number, y: number) => {
       if (!allowed() || document.hidden || flock.length > 0) return;
       const dir = Math.random() < 0.5 ? 1 : -1;
@@ -97,6 +104,7 @@ export const bats: Interaction = {
     cleanup = () => {
       if (raf) cancelAnimationFrame(raf);
       clearTimeout(timer);
+      unsub();
       window.removeEventListener('resize', resize);
       document.removeEventListener('click', onClick);
       document.removeEventListener('visibilitychange', onVisibility);

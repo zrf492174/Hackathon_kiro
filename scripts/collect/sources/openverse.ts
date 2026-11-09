@@ -1,5 +1,5 @@
 import { licenseUrl, normalizeLicense, requiresAttribution } from '../license';
-import { RateLimitError, type Candidate, type SearchOptions } from './types';
+import { RateLimitError, USER_AGENT, type Candidate, type SearchOptions } from './types';
 
 interface OpenverseResult {
   title?: string;
@@ -47,7 +47,9 @@ export async function searchOpenverse(opts: SearchOptions): Promise<Candidate[]>
     license: 'cc0,pdm,by',
     page_size: String(Math.min(opts.limit, 50)),
   });
-  const res = await f(`https://api.openverse.org/v1/images/?${params}`);
+  const res = await f(`https://api.openverse.org/v1/images/?${params}`, {
+    headers: { 'User-Agent': USER_AGENT },
+  });
   if (res.status === 429) throw new RateLimitError('openverse');
   if (!res.ok) throw new Error(`openverse: HTTP ${res.status}`);
   return parseOpenverse(await res.json()).slice(0, opts.limit);

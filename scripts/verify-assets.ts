@@ -15,6 +15,9 @@ function walk(dir: string): string[] {
 }
 
 /** Verify assets under assetsDir against its manifest.json. Returns a list of errors. */
+/** Originals above this size need optimizing (sharp step is not implemented yet). */
+export const MAX_ASSET_BYTES = 2 * 1024 * 1024;
+
 export function verifyAssets(assetsDir: string): string[] {
   const manifestPath = join(assetsDir, 'manifest.json');
   if (!existsSync(manifestPath)) return ['manifest.json is missing'];
@@ -32,6 +35,8 @@ export function verifyAssets(assetsDir: string): string[] {
     const full = join(assetsDir, a.file);
     if (!existsSync(full)) {
       errors.push(`${a.id}: file not found ${a.file}`);
+    } else if (statSync(full).size > MAX_ASSET_BYTES) {
+      errors.push(`${a.id}: ${a.file} exceeds ${MAX_ASSET_BYTES} bytes, optimize it first`);
     } else if (a.sha256 && sha256(readFileSync(full)) !== a.sha256) {
       errors.push(`${a.id}: sha256 mismatch for ${a.file}`);
     }

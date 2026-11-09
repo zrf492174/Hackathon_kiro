@@ -1,5 +1,5 @@
 import { licenseUrl, normalizeLicense, requiresAttribution } from '../license';
-import { RateLimitError, type Candidate, type SearchOptions } from './types';
+import { RateLimitError, USER_AGENT, type Candidate, type SearchOptions } from './types';
 
 interface Meta {
   value?: string;
@@ -63,7 +63,9 @@ export async function searchWikimedia(opts: SearchOptions): Promise<Candidate[]>
     prop: 'imageinfo',
     iiprop: 'url|size|extmetadata',
   });
-  const res = await f(`https://commons.wikimedia.org/w/api.php?${params}`);
+  const res = await f(`https://commons.wikimedia.org/w/api.php?${params}`, {
+    headers: { 'User-Agent': USER_AGENT },
+  });
   if (res.status === 429) throw new RateLimitError('wikimedia');
   if (!res.ok) throw new Error(`wikimedia: HTTP ${res.status}`);
   return parseWikimedia(await res.json()).slice(0, opts.limit);

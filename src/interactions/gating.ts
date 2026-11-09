@@ -26,6 +26,11 @@ export function batsAllowed(s: Settings, osPref: boolean): boolean {
   return !s.safeMode && !effectiveReducedMotion(s, osPref);
 }
 
+/** The dark flashlight overlay is opt-in and off under safe mode or reduced motion. */
+export function flashlightAllowed(s: Settings, osPref: boolean): boolean {
+  return s.flashlight && !s.safeMode && !effectiveReducedMotion(s, osPref);
+}
+
 /** The spider's dangling animation is replaced by a static pose when motion is reduced. */
 export function spiderAnimated(s: Settings, osPref: boolean): boolean {
   return !s.safeMode && !effectiveReducedMotion(s, osPref);
