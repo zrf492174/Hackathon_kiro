@@ -5,7 +5,10 @@ import { verifyAssets } from '../verify-assets';
 import { writeCredits } from './credits';
 import { dedupe, sha256 } from './dedupe';
 import { loadManifest, saveManifest, type Manifest, type ManifestAsset } from './manifest';
+import { searchFreesound } from './sources/freesound';
 import { searchOpenverse } from './sources/openverse';
+import { searchPixabay } from './sources/pixabay';
+import { searchUnsplash } from './sources/unsplash';
 import { RateLimitError, USER_AGENT, type Candidate } from './sources/types';
 import { searchWikimedia } from './sources/wikimedia';
 
@@ -77,7 +80,13 @@ export function buildJobs(args: Args, config: Config): Job[] {
   ];
 }
 
-const SEARCH = { openverse: searchOpenverse, wikimedia: searchWikimedia } as const;
+const SEARCH = {
+  openverse: searchOpenverse,
+  wikimedia: searchWikimedia,
+  pixabay: searchPixabay,
+  unsplash: searchUnsplash,
+  freesound: searchFreesound,
+} as const;
 
 export function toEntry(
   c: Candidate,

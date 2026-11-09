@@ -14,13 +14,17 @@
     "assets:collect:all": "tsx scripts/collect/index.ts --all",
     "assets:verify": "tsx scripts/verify-assets.ts",
     "assets:credits": "tsx scripts/collect/credits-cli.ts",
-    "assets:placeholders": "tsx scripts/collect/placeholders.ts"
+    "assets:placeholders": "tsx scripts/collect/placeholders.ts",
+    "test:e2e": "playwright test"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
     "@eslint/js": "^9.0.0",
+    "@playwright/test": "^1.65.0",
     "@types/node": "^22.20.5",
     "eslint": "^9.0.0",
     "prettier": "^3.3.0",
+    "sharp": "^0.35.5",
     "tsx": "^4.23.15",
     "typescript": "^5.5.0",
     "typescript-eslint": "^8.0.0",

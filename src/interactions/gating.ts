@@ -35,3 +35,23 @@ export function flashlightAllowed(s: Settings, osPref: boolean): boolean {
 export function spiderAnimated(s: Settings, osPref: boolean): boolean {
   return !s.safeMode && !effectiveReducedMotion(s, osPref);
 }
+
+/** Lightning flashes and animated rain are off under safe mode or reduced motion. */
+export function lightningAllowed(s: Settings, osPref: boolean): boolean {
+  return !s.safeMode && !effectiveReducedMotion(s, osPref);
+}
+
+/** Thunder is a scare sound: only when scares are explicitly enabled. */
+export function thunderAllowed(s: Settings): boolean {
+  return s.scaresEnabled && !s.safeMode;
+}
+
+/** Eyes blink away with a quick fade; they stay static (no blink animation) otherwise. */
+export function eyesAnimated(s: Settings, osPref: boolean): boolean {
+  return !s.safeMode && !effectiveReducedMotion(s, osPref);
+}
+
+/** Ghost rain and the blood moon pulse are reduced to static visuals when motion is limited. */
+export function eggMotionAllowed(s: Settings, osPref: boolean): boolean {
+  return !s.safeMode && !effectiveReducedMotion(s, osPref);
+}

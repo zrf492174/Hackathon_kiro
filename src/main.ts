@@ -12,7 +12,10 @@ import {
 import { showWarningModal } from './ui/warningModal';
 import { mountSettingsPanel } from './ui/settingsPanel';
 import { loadAssets } from './core/assets';
-import { enterGate } from './scenes/gate';
+import { mountSceneNav } from './scenes';
+import { easterEggs, touch } from './interactions';
+import { createBrowserCollection } from './core/collection';
+import { mountCollectionBook } from './ui/collectionBook';
 import './styles/interactions.css';
 
 const settings = createBrowserSettings();
@@ -58,16 +61,25 @@ void showWarningModal(document.body).then(async ({ sound }) => {
 });
 
 const live = document.getElementById('live') as HTMLElement;
+const collection = createBrowserCollection();
 void loadAssets(import.meta.env.BASE_URL).then((assets) => {
-  enterGate({
+  const ctx = {
     root: app,
     settings,
     assets,
     audio,
     osReducedMotion: osPrefersReducedMotion,
-    announce: (m) => {
+    announce: (m: string) => {
       live.textContent = m;
     },
     addScore: () => undefined,
-  });
+    discover: (url: string) => {
+      const rec = assets.recordForUrl(url);
+      if (rec && collection.add(rec.id)) live.textContent = `Discovered: ${rec.title}.`;
+    },
+  };
+  mountCollectionBook(document.body, collection, () => assets.records());
+  touch.init(ctx);
+  easterEggs.init(ctx);
+  mountSceneNav(app, ctx);
 });
