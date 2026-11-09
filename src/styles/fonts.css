@@ -1,0 +1,7 @@
+/* System font stacks. Self-hosted OFL fonts (Creepster, Special Elite, Noto) can be added
+   later via @font-face with files under public/fonts; no external requests are made. */
+:root {
+  --font-title: 'Creepster', 'Special Elite', Impact, 'Arial Black', fantasy, sans-serif;
+  --font-hand: 'Special Elite', 'Courier New', Courier, monospace;
+  --font-body: 'Noto Serif SC', Georgia, 'Times New Roman', 'Songti SC', 'SimSun', serif;
+}
