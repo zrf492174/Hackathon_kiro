@@ -8,6 +8,10 @@ async function enter(page: Page) {
   await expect(page.getByRole('dialog')).toHaveCount(0);
 }
 
+async function goScene(page: Page, name: string) {
+  await page.locator('.scene-nav').getByRole('button', { name, exact: true }).click();
+}
+
 test('warning then enter shows the gate', async ({ page }) => {
   await enter(page);
   await expect(page.getByRole('heading', { name: 'Haunted Hollow' })).toBeVisible();
@@ -24,6 +28,7 @@ test('mute toggle in settings', async ({ page }) => {
 
 test('pumpkin click does not break the page', async ({ page }) => {
   await enter(page);
+  await goScene(page, 'Pumpkin patch');
   const pumpkin = page.locator('.pumpkin').first();
   await pumpkin.click();
   await expect(pumpkin).toBeVisible();
@@ -72,10 +77,6 @@ test('first load under the base path: no errors, assets 200, warning visible', a
   expect(errors).toEqual([]);
   expect(bad).toEqual([]);
 });
-
-async function goScene(page: Page, name: string) {
-  await page.locator('.scene-nav').getByRole('button', { name, exact: true }).click();
-}
 
 async function axeClean(page: Page) {
   await page.waitForTimeout(800); // let page-turn animation finish
@@ -135,4 +136,90 @@ test('reduced motion stops window flicker', async ({ page }) => {
     .first()
     .evaluate((e) => getComputedStyle(e).animationName);
   expect(anim).toBe('none');
+});
+
+test('grouped nav reaches every scene with aria-current', async ({ page }) => {
+  await enter(page);
+  const nav = page.locator('.scene-nav');
+  await expect(nav.getByRole('group')).toHaveCount(2);
+  for (const n of [
+    'Gate',
+    'Pumpkin patch',
+    'Graveyard',
+    'Foggy Town',
+    'Attic',
+    'Castle',
+    'Laboratory',
+    'Library',
+    'Gazette',
+  ]) {
+    const b = nav.getByRole('button', { name: n, exact: true });
+    await b.click();
+    await expect(b).toHaveAttribute('aria-current', 'page');
+    const box = await b.boundingBox();
+    expect(box?.height).toBeGreaterThanOrEqual(44);
+  }
+});
+
+test('graveyard tombstone reveals an epitaph; axe passes', async ({ page }) => {
+  await enter(page);
+  await goScene(page, 'Graveyard');
+  await page.getByRole('button', { name: 'Tombstone of Mirabel Thorne', exact: false }).click();
+  await expect(page.locator('.yard__epitaph')).toContainText('Please stop knocking');
+  expect(await axeClean(page)).toEqual([]);
+});
+
+test('horror homage figure is a keyboard button', async ({ page }) => {
+  await enter(page);
+  await goScene(page, 'Castle');
+  const f = page.getByRole('button', { name: 'Caped gentleman silhouette' });
+  await f.focus();
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#live')).toContainText('Welcome');
+});
+
+test('lab voltage control and lever', async ({ page }) => {
+  await enter(page);
+  await goScene(page, 'Laboratory');
+  const volt = page.getByLabel('Voltage');
+  await volt.fill('100');
+  const lever = page.getByRole('button', { name: 'Pull the lever' });
+  await lever.click();
+  await expect(lever).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator('.scene-lab')).toHaveCSS('--arc', '1');
+  await page.getByRole('button', { name: 'Green flask' }).click();
+  await expect(page.getByRole('button', { name: 'Green flask' })).toHaveAttribute(
+    'aria-pressed',
+    'true',
+  );
+  expect(await axeClean(page)).toEqual([]);
+});
+
+test('foggy town reveals a creature and axe passes', async ({ page }) => {
+  await enter(page);
+  await goScene(page, 'Foggy Town');
+  await page.getByRole('button', { name: 'Listen' }).click();
+  await expect(page.locator('.creature--shown')).toHaveCount(1);
+  await expect(page.locator('.town__status')).not.toBeEmpty();
+  expect(await axeClean(page)).toEqual([]);
+});
+
+test('gazette has an aged gradient background', async ({ page }) => {
+  await enter(page);
+  await goScene(page, 'Gazette');
+  const bg = await page.locator('.gazette').evaluate((e) => getComputedStyle(e).backgroundImage);
+  expect(bg).toContain('gradient');
+});
+
+test('reduced motion keeps new scenes static', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await enter(page);
+  await goScene(page, 'Foggy Town');
+  expect(
+    await page.locator('.town__fog--a').evaluate((e) => getComputedStyle(e).animationName),
+  ).toBe('none');
+  await goScene(page, 'Graveyard');
+  expect(await page.locator('.yard__mist').evaluate((e) => getComputedStyle(e).animationName)).toBe(
+    'none',
+  );
 });

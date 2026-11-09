@@ -31,6 +31,7 @@ export async function mountGazette(host: HTMLElement): Promise<Gazette> {
   } else {
     wrap.innerHTML = `
       <h2 class="gazette__masthead">The Haunted Gazette</h2>
+      <p class="gazette__dateline"><span>Vol. XIII</span><span>Late Moonlight Edition</span><span>Price: One Whisper</span></p>
       <p class="gazette__raven" aria-hidden="true">
         <svg viewBox="0 0 60 30" width="60" height="30"><path d="M2 20 Q20 0 38 12 L58 8 L44 16 Q36 28 18 26 Z" fill="#111"/><circle cx="34" cy="12" r="1.5" fill="#e8d8b0"/></svg>
         Delivered by raven
