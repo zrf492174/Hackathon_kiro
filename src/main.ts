@@ -11,6 +11,9 @@ import {
 } from './a11y/reducedMotion';
 import { showWarningModal } from './ui/warningModal';
 import { mountSettingsPanel } from './ui/settingsPanel';
+import { loadAssets } from './core/assets';
+import { enterGate } from './scenes/gate';
+import './styles/interactions.css';
 
 const settings = createBrowserSettings();
 const audio = new AudioManager({ scaresAllowed: () => scaresActive(settings.get()) });
@@ -28,6 +31,7 @@ app.innerHTML = `
     <p class="tagline">Something is watching from the fog.</p>
     <div id="live" class="sr-only" aria-live="polite"></div>
   </main>
+  <footer class="site-footer"><a href="https://github.com/zrf492174/Hackathon_kiro/blob/main/CREDITS.md" rel="noopener">Credits and licenses</a></footer>
   <canvas id="fog" class="fx" aria-hidden="true"></canvas>
   <div class="fx vignette" aria-hidden="true"></div>
   <div class="fx grain" aria-hidden="true"></div>
@@ -51,4 +55,19 @@ void showWarningModal(document.body).then(async ({ sound }) => {
     audio.setMuted(settings.get().muted);
     audio.play('wind');
   }
+});
+
+const live = document.getElementById('live') as HTMLElement;
+void loadAssets(import.meta.env.BASE_URL).then((assets) => {
+  enterGate({
+    root: app,
+    settings,
+    assets,
+    audio,
+    osReducedMotion: osPrefersReducedMotion,
+    announce: (m) => {
+      live.textContent = m;
+    },
+    addScore: () => undefined,
+  });
 });
