@@ -18,6 +18,7 @@ import { createBrowserCollection } from './core/collection';
 import { mountCollectionBook } from './ui/collectionBook';
 import './styles/interactions.css';
 import './styles/grimoire.css';
+import './styles/v4.css';
 
 const settings = createBrowserSettings();
 const audio = new AudioManager({ scaresAllowed: () => scaresActive(settings.get()) });

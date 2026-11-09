@@ -1,12 +1,13 @@
-import { bats, cobweb, flashlight, popupGhost, pumpkin } from '../interactions';
+import { bats, cobweb, flashlight, popupGhost } from '../interactions';
+import { createFigures } from '../interactions/figures';
 import type { Interaction, InteractionContext } from '../interactions';
 
-const INTERACTIONS: Interaction[] = [cobweb, pumpkin, flashlight, popupGhost, bats];
+const INTERACTIONS: Interaction[] = [cobweb, flashlight, popupGhost, bats, createFigures('gate')];
 
 let stage: HTMLElement | null = null;
 let score = 0;
 
-/** The gate scene: cobweb corner, pumpkin row, flashlight, wandering ghosts and bats. */
+/** The gate scene: cobweb corner, flashlight, wandering ghosts and bats. */
 export function enterGate(ctx: InteractionContext): void {
   leaveGate();
   stage = document.createElement('section');
@@ -14,7 +15,7 @@ export function enterGate(ctx: InteractionContext): void {
   stage.setAttribute('aria-label', 'The haunted gate');
   stage.innerHTML = `
     <p class="score">Score: <span id="score">0</span></p>
-    <div class="hidden-door" hidden role="img" aria-label="A hidden door, now open"></div>`;
+    <p class="gate__hint">The gate stands open. Choose a path below.</p>`;
   ctx.root.appendChild(stage);
   score = 0;
   const scoped: InteractionContext = {

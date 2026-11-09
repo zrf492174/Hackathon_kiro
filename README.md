@@ -56,3 +56,16 @@ Hosted on GitHub Pages with Vite `base` set to `/Hackathon_kiro/`.
 - **Gazette**: `public/data/gazette.json` as a haunted newspaper. Only headlines, links and licence/terms text are shown.
 
 Data is fetched from the site's own `data/` folder (works under the `/Hackathon_kiro/` base) and shows a friendly message if unavailable. Refresh it with the literature collector.
+
+## v4 polish
+
+- **Graveyard**: layered SVG scene (moon, dead trees, crypt, iron fence, crows, gravedigger lantern, mist) with focusable tombstones that reveal epitaphs and a slowly rising hand (static under reduced motion or safe mode).
+- **Gazette**: aged, yellowed newspaper with a CSS-only gradient, paper grain, serif masthead, dateline and columns.
+- **Classic horror homages**: original silhouettes (long-fingered stair shadow, caped gentleman, gaunt wanderer, sleepwalker, bandaged wanderer, werewolf) as keyboard-focusable buttons in the gate, attic, graveyard and castle. Motion only when allowed; no flashing.
+- **Laboratory**: stone interior with a stormy window, Tesla coils, gauges, a sheet-covered stitched creature and a hunched assistant; lever, voltage slider and bubbling flasks.
+- **Grouped navigation**: Outdoors and Indoors groups replace the flat button row; the duplicate pumpkin puzzle now lives only in the Pumpkin patch.
+- **Foggy Town**: dense layered fog with a density slider, a rusty siren, and creatures revealed by Listen / Search buttons or the lantern pointer.
+
+### Homage credit
+
+Inspired by classic horror cinema, including Silent Hill and The Mist. All artwork is original inline SVG/CSS; no film designs are copied or traced.
