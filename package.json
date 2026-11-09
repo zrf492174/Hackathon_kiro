@@ -15,7 +15,9 @@
     "assets:verify": "tsx scripts/verify-assets.ts",
     "assets:credits": "tsx scripts/collect/credits-cli.ts",
     "assets:placeholders": "tsx scripts/collect/placeholders.ts",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "lit:collect": "tsx scripts/collect/lit/index.ts --all",
+    "lit:verify": "tsx scripts/collect/lit/index.ts --verify"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.14.0",

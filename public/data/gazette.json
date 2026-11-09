@@ -1,0 +1,108 @@
+{
+  "meta": {
+    "generatedAt": "2025-01-01T00:00:00.000Z",
+    "kind": "news",
+    "sources": ["seed"],
+    "terms": "Headline, link, domain and date only. No article text is stored. Wikinews items are CC BY 2.5 / CC BY-SA (Wikinews contributors); Wikipedia reference links carry the article title only (text CC BY-SA 4.0, Wikipedia contributors); all other items are links to the original publishers."
+  },
+  "records": [
+    {
+      "kind": "news",
+      "id": "url:https://en.wikipedia.org/wiki/Halloween",
+      "title": "Halloween",
+      "authors": [],
+      "venue": "Wikipedia (reference article)",
+      "url": "https://en.wikipedia.org/wiki/Halloween",
+      "source": "seed",
+      "license": "Title and link only; Wikipedia text is CC BY-SA 4.0 (Wikipedia contributors)",
+      "topic": "halloween-news",
+      "fetchedAt": "2025-01-01T00:00:00.000Z",
+      "sample": true,
+      "note": "Reference link, not a news story. Seeded until the first live gazette collect replaces it with dated news."
+    },
+    {
+      "kind": "news",
+      "id": "url:https://en.wikipedia.org/wiki/Jack-o%27-lantern",
+      "title": "Jack-o'-lantern",
+      "authors": [],
+      "venue": "Wikipedia (reference article)",
+      "url": "https://en.wikipedia.org/wiki/Jack-o%27-lantern",
+      "source": "seed",
+      "license": "Title and link only; Wikipedia text is CC BY-SA 4.0 (Wikipedia contributors)",
+      "topic": "halloween-news",
+      "fetchedAt": "2025-01-01T00:00:00.000Z",
+      "sample": true,
+      "note": "Reference link, not a news story. Seeded until the first live gazette collect replaces it with dated news."
+    },
+    {
+      "kind": "news",
+      "id": "url:https://en.wikipedia.org/wiki/Frankenstein",
+      "title": "Frankenstein",
+      "authors": [],
+      "venue": "Wikipedia (reference article)",
+      "url": "https://en.wikipedia.org/wiki/Frankenstein",
+      "source": "seed",
+      "license": "Title and link only; Wikipedia text is CC BY-SA 4.0 (Wikipedia contributors)",
+      "topic": "frankenstein",
+      "fetchedAt": "2025-01-01T00:00:00.000Z",
+      "sample": true,
+      "note": "Reference link, not a news story. Seeded until the first live gazette collect replaces it with dated news."
+    },
+    {
+      "kind": "news",
+      "id": "url:https://en.wikipedia.org/wiki/Galvanism",
+      "title": "Galvanism",
+      "authors": [],
+      "venue": "Wikipedia (reference article)",
+      "url": "https://en.wikipedia.org/wiki/Galvanism",
+      "source": "seed",
+      "license": "Title and link only; Wikipedia text is CC BY-SA 4.0 (Wikipedia contributors)",
+      "topic": "frankenstein",
+      "fetchedAt": "2025-01-01T00:00:00.000Z",
+      "sample": true,
+      "note": "Reference link, not a news story. Seeded until the first live gazette collect replaces it with dated news."
+    },
+    {
+      "kind": "news",
+      "id": "url:https://en.wikipedia.org/wiki/Will-o%27-the-wisp",
+      "title": "Will-o'-the-wisp",
+      "authors": [],
+      "venue": "Wikipedia (reference article)",
+      "url": "https://en.wikipedia.org/wiki/Will-o%27-the-wisp",
+      "source": "seed",
+      "license": "Title and link only; Wikipedia text is CC BY-SA 4.0 (Wikipedia contributors)",
+      "topic": "foxfire",
+      "fetchedAt": "2025-01-01T00:00:00.000Z",
+      "sample": true,
+      "note": "Reference link, not a news story. Seeded until the first live gazette collect replaces it with dated news."
+    },
+    {
+      "kind": "news",
+      "id": "url:https://en.wikipedia.org/wiki/Sleep_paralysis",
+      "title": "Sleep paralysis",
+      "authors": [],
+      "venue": "Wikipedia (reference article)",
+      "url": "https://en.wikipedia.org/wiki/Sleep_paralysis",
+      "source": "seed",
+      "license": "Title and link only; Wikipedia text is CC BY-SA 4.0 (Wikipedia contributors)",
+      "topic": "sleep-paralysis",
+      "fetchedAt": "2025-01-01T00:00:00.000Z",
+      "sample": true,
+      "note": "Reference link, not a news story. Seeded until the first live gazette collect replaces it with dated news."
+    },
+    {
+      "kind": "news",
+      "id": "url:https://en.wikipedia.org/wiki/Samhain",
+      "title": "Samhain",
+      "authors": [],
+      "venue": "Wikipedia (reference article)",
+      "url": "https://en.wikipedia.org/wiki/Samhain",
+      "source": "seed",
+      "license": "Title and link only; Wikipedia text is CC BY-SA 4.0 (Wikipedia contributors)",
+      "topic": "halloween-history",
+      "fetchedAt": "2025-01-01T00:00:00.000Z",
+      "sample": true,
+      "note": "Reference link, not a news story. Seeded until the first live gazette collect replaces it with dated news."
+    }
+  ]
+}

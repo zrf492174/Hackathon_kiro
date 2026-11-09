@@ -30,6 +30,7 @@ See [PLAN.md](PLAN.md) for the full plan (Chinese).
 - `npm run test:e2e` run Playwright and axe accessibility tests (needs `npx playwright install chromium`)
 - `npm run lint` run ESLint and Prettier checks
 - `npm run assets:collect` / `assets:collect:all` collect openly licensed assets (API keys via env)
+- `npm run lit:collect` gathers Halloween-themed paper and news metadata (OpenAlex, Crossref, Europe PMC, arXiv, GDELT, Wikinews) into `public/data/grimoire.json` and `public/data/gazette.json`. Metadata only, no full text; abstract snippets (max 300 chars) only where the licence allows. Use `-- --offline --dry-run` to run against test fixtures without network or writes. `npm run lit:verify` validates the committed datasets. Entries flagged `sample: true` are hand-seeded and pending confirmation. A weekly workflow opens a PR with updates.
 - `npm run assets:verify` validate the manifest and files
 - `npm run assets:credits` regenerate [CREDITS.md](CREDITS.md)
 
@@ -46,3 +47,12 @@ Hosted on GitHub Pages with Vite `base` set to `/Hackathon_kiro/`.
 3. The `deploy.yml` workflow builds and publishes `dist/` on every push to `main` (or run it manually).
 
 `public/404.html` provides the Pages not-found page.
+
+## Gothic scenes: castle, laboratory, library, gazette
+
+- **Castle**: SVG castle on a hill with slow window flicker (under 3 flashes per second, static in safe mode and reduced motion). The drawbridge button leads to the library.
+- **Laboratory**: Frankenstein style lab with a Tesla coil and a stitched monster. The lever is a toggle button (`aria-pressed`); animation is static in safe mode and reduced motion.
+- **Library**: `public/data/grimoire.json` shown as an ancient spellbook, one paper per page. Use the buttons or ArrowLeft/ArrowRight to turn pages, and the chapter filter to pick a topic. Entries marked `sample` are hand-seeded.
+- **Gazette**: `public/data/gazette.json` as a haunted newspaper. Only headlines, links and licence/terms text are shown.
+
+Data is fetched from the site's own `data/` folder (works under the `/Hackathon_kiro/` base) and shows a friendly message if unavailable. Refresh it with the literature collector.

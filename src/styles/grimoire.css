@@ -1,0 +1,267 @@
+/* Castle, laboratory, grimoire and gazette scenes. */
+.scene-castle,
+.scene-lab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 5.5rem;
+  padding-bottom: 5rem;
+}
+.castle,
+.lab {
+  width: min(92vw, 480px, 60vh);
+}
+.castle__svg,
+.lab__svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.castle__door,
+.lab__lever {
+  min-width: 44px;
+  min-height: 44px;
+  margin-top: 1rem;
+  padding: 0 1rem;
+  color: var(--ghost);
+  background: var(--purple);
+  border: 1px solid var(--pumpkin);
+  cursor: pointer;
+  position: relative;
+  z-index: 5;
+}
+.lab__lever[aria-pressed='true'] {
+  background: var(--pumpkin);
+  color: var(--bg);
+}
+
+/* Windows flicker slowly: one cycle is 2.4 s, far below 3 flashes per second. */
+.castle__win {
+  animation: win-flicker 2.4s steps(1, end) infinite;
+}
+.castle__win--b {
+  animation-delay: -0.8s;
+}
+.castle__win--c {
+  animation-delay: -1.6s;
+}
+@keyframes win-flicker {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  55% {
+    opacity: 0.55;
+  }
+}
+
+.lab__spark {
+  opacity: 0.35;
+}
+.lab--live .lab__spark {
+  animation: spark 0.8s steps(1, end) infinite;
+}
+.lab--live .lab__spark--b {
+  animation-delay: -0.4s;
+}
+.lab--live .lab__monster {
+  animation: monster-twitch 1.6s ease-in-out infinite;
+  transform-origin: 245px 165px;
+}
+@keyframes spark {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.2;
+  }
+}
+@keyframes monster-twitch {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  50% {
+    transform: rotate(-3deg);
+  }
+}
+
+/* Static state for reduced motion and safe mode */
+:root[data-reduced-motion='true'] .castle__win,
+:root[data-safe-mode='true'] .castle__win,
+:root[data-reduced-motion='true'] .lab--live .lab__spark,
+:root[data-safe-mode='true'] .lab--live .lab__spark,
+:root[data-reduced-motion='true'] .lab--live .lab__monster,
+:root[data-safe-mode='true'] .lab--live .lab__monster,
+:root[data-reduced-motion='true'] .grimoire__book.turning,
+:root[data-safe-mode='true'] .grimoire__book.turning {
+  animation: none;
+}
+:root[data-reduced-motion='true'] .lab--live .lab__spark,
+:root[data-safe-mode='true'] .lab--live .lab__spark {
+  opacity: 1;
+}
+
+/* Grimoire */
+.scene-library,
+.scene-gazette {
+  padding: 6rem 0.75rem 6rem;
+  display: flex;
+  justify-content: center;
+}
+.grimoire {
+  width: min(94vw, 720px);
+  padding: 1rem;
+  color: #f3e6c4;
+  background: #2a160c;
+  border: 3px solid #7a4a1d;
+  border-radius: 6px;
+  box-shadow: 0 0 40px rgba(255, 170, 60, 0.25);
+}
+.grimoire__heading {
+  margin: 0 0 0.5rem;
+  color: #ffc857;
+  font-size: 1.3rem;
+}
+.grimoire__filter select {
+  min-height: 44px;
+  margin-left: 0.5rem;
+  color: #2a160c;
+  background: #f3e6c4;
+}
+.grimoire__book {
+  margin: 0.75rem 0;
+  perspective: 1200px;
+  transform-origin: left center;
+}
+.grimoire__book.turning {
+  animation: page-turn 0.6s ease-out;
+}
+@keyframes page-turn {
+  from {
+    transform: rotateY(-70deg);
+    opacity: 0.4;
+  }
+  to {
+    transform: rotateY(0);
+    opacity: 1;
+  }
+}
+.spell {
+  padding: 1.25rem;
+  color: #2a160c;
+  background: radial-gradient(circle at 50% 40%, #f1e2b8, #d9bf86);
+  border: 1px solid #7a4a1d;
+  box-shadow: inset 0 0 30px rgba(120, 70, 20, 0.35);
+}
+.spell__rune {
+  margin: 0;
+  color: #6b1d1d;
+  font-size: 2rem;
+  text-shadow: 0 0 8px rgba(255, 170, 60, 0.8);
+}
+.spell__title {
+  margin: 0.25rem 0;
+}
+.spell__meta,
+.spell__cite,
+.spell__abstract {
+  margin: 0.4rem 0;
+}
+.spell a,
+.gazette a {
+  color: #4a1500;
+  text-decoration: underline;
+  display: inline-block;
+  min-height: 24px;
+}
+.badge {
+  display: inline-block;
+  padding: 0 0.4rem;
+  color: #f3e6c4;
+  background: #6b1d1d;
+  font-size: 0.8rem;
+}
+.grimoire__controls {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: space-between;
+}
+.grimoire__controls button {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 1rem;
+  color: #2a160c;
+  background: #ffc857;
+  border: 1px solid #7a4a1d;
+  cursor: pointer;
+}
+.grimoire__controls button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.grimoire__terms,
+.gazette__terms {
+  margin: 0.75rem 0 0;
+  font-size: 0.85rem;
+}
+
+/* Gazette */
+.gazette {
+  width: min(94vw, 720px);
+  padding: 1rem 1.25rem;
+  color: #1c1c1c;
+  background: #e6dcc3;
+  border: 1px solid #555;
+  clip-path: polygon(
+    0 2%,
+    4% 0,
+    12% 1.5%,
+    30% 0,
+    55% 1%,
+    80% 0,
+    100% 2%,
+    99% 98%,
+    70% 100%,
+    40% 98.5%,
+    10% 100%,
+    0 98%
+  );
+}
+.gazette__masthead {
+  margin: 0;
+  font-size: 1.8rem;
+  text-align: center;
+  border-bottom: 3px double #1c1c1c;
+}
+.gazette__raven {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.25rem 0;
+}
+.gazette__list {
+  padding: 0;
+  list-style: none;
+}
+.gazette__item {
+  padding: 0.5rem 0;
+  border-bottom: 1px dashed #555;
+}
+.gazette__item h3 {
+  margin: 0;
+}
+.gazette__meta,
+.gazette__lic {
+  margin: 0.2rem 0;
+}
+
+/* Keep the fixed footer readable over parchment and newsprint. */
+.site-footer {
+  background: var(--bg);
+}
+.gazette__masthead {
+  color: #1c1c1c;
+}

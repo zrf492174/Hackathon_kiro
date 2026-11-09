@@ -1,0 +1,12 @@
+{
+  "message": {
+    "items": [
+      {
+        "title": ["No DOI"]
+      },
+      {
+        "DOI": "10.1234/notitle"
+      }
+    ]
+  }
+}

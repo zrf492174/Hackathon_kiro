@@ -1,0 +1,40 @@
+{
+  "resultList": {
+    "result": [
+      {
+        "id": "111",
+        "source": "MED",
+        "doi": "10.1234/fungi.3",
+        "title": "Glowing fungi.",
+        "authorString": "Moss A, Cap B.",
+        "pubYear": "2018",
+        "journalTitle": "Mycology Now",
+        "isOpenAccess": "Y",
+        "abstractText": "<h4>Background</h4> Foxfire glows in the dark.",
+        "license": "cc0"
+      },
+      {
+        "id": "333",
+        "source": "MED",
+        "doi": "10.1234/nc.5",
+        "title": "Non commercial glow.",
+        "authorString": "Lux L.",
+        "pubYear": "2019",
+        "journalTitle": "Open NC",
+        "isOpenAccess": "Y",
+        "license": "cc by-nc",
+        "abstractText": "Must not be stored."
+      },
+      {
+        "id": "222",
+        "source": "MED",
+        "title": "Closed paper",
+        "authorString": "Doe J.",
+        "pubYear": "2017",
+        "journalTitle": "Closed Journal",
+        "isOpenAccess": "N",
+        "abstractText": "Not for redistribution."
+      }
+    ]
+  }
+}

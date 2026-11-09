@@ -1,0 +1,20 @@
+{
+  "maxPapers": 120,
+  "maxNews": 60,
+  "perQuery": 8,
+  "throttleMs": 1000,
+  "topics": [
+    { "topic": "fear-psychology", "query": "fear horror psychology", "kind": "paper" },
+    { "topic": "pumpkin-biology", "query": "Cucurbita pepo pumpkin", "kind": "paper" },
+    { "topic": "bats", "query": "bats Chiroptera ecology", "kind": "paper" },
+    { "topic": "spiders", "query": "spider arachnophobia", "kind": "paper" },
+    { "topic": "folklore", "query": "folklore supernatural belief", "kind": "paper" },
+    { "topic": "sleep-paralysis", "query": "sleep paralysis", "kind": "paper" },
+    { "topic": "frankenstein", "query": "Mary Shelley Frankenstein galvanism", "kind": "paper" },
+    { "topic": "foxfire", "query": "bioluminescent fungi foxfire", "kind": "paper" },
+    { "topic": "halloween-history", "query": "Halloween history Samhain", "kind": "paper" },
+    { "topic": "halloween-news", "query": "Halloween", "kind": "news" }
+  ],
+  "paperSources": ["openalex", "crossref", "europepmc", "arxiv"],
+  "newsSources": ["gdelt", "wikinews"]
+}

@@ -1,0 +1,28 @@
+{
+  "message": {
+    "items": [
+      {
+        "DOI": "10.1234/SPIDER.2",
+        "title": ["Spider Fear"],
+        "author": [
+          {
+            "given": "Ann",
+            "family": "Webb"
+          }
+        ],
+        "issued": {
+          "date-parts": [[2019, 5]]
+        },
+        "container-title": ["Arachnid Psychology"],
+        "abstract": "<p>Should be ignored</p>"
+      },
+      {
+        "DOI": "10.1234/bat.1",
+        "title": ["Bats at Dusk"],
+        "issued": {
+          "date-parts": [[2020]]
+        }
+      }
+    ]
+  }
+}

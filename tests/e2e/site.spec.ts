@@ -43,3 +43,96 @@ test('no serious accessibility violations', async ({ page }) => {
     bad.map((v) => `${v.id}: ${v.help} [${v.nodes.map((n) => n.target.join(' ')).join(', ')}]`),
   ).toEqual([]);
 });
+
+test('first load under the base path: no errors, assets 200, warning visible', async ({ page }) => {
+  const errors: string[] = [];
+  const bad: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  page.on('console', (m) => {
+    if (m.type() === 'error') errors.push(m.text());
+  });
+  page.on('response', (r) => {
+    if (r.status() >= 400) bad.push(`${r.status()} ${r.url()}`);
+  });
+  const res = await page.goto('./');
+  expect(res?.status()).toBe(200);
+  const scripts = await page
+    .locator('script[type="module"]')
+    .evaluateAll((els) => els.map((e) => (e as HTMLScriptElement).src));
+  expect(scripts.length).toBeGreaterThan(0);
+  for (const s of scripts) {
+    expect(s).toContain('/Hackathon_kiro/assets/');
+    expect(s).not.toContain('/src/');
+  }
+  await expect(page.getByRole('dialog')).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Enter muted' })).toBeVisible();
+  await page.getByRole('button', { name: 'Enter muted' }).click();
+  await expect(page.getByRole('heading', { name: 'Haunted Hollow' })).toBeVisible();
+  await page.waitForLoadState('networkidle');
+  expect(errors).toEqual([]);
+  expect(bad).toEqual([]);
+});
+
+async function goScene(page: Page, name: string) {
+  await page.locator('.scene-nav').getByRole('button', { name, exact: true }).click();
+}
+
+async function axeClean(page: Page) {
+  await page.waitForTimeout(800); // let page-turn animation finish
+  const results = await new AxeBuilder({ page }).analyze();
+  return results.violations.map(
+    (v) =>
+      `${v.id}: ${v.nodes.map((n) => n.target.join(' ') + ' ' + (n.any[0]?.message ?? '')).join(' | ')}`,
+  );
+}
+
+test('castle door leads to the library; pages turn by keyboard; DOI link is safe', async ({
+  page,
+}) => {
+  await enter(page);
+  await goScene(page, 'Castle');
+  expect(await axeClean(page)).toEqual([]);
+  await page.getByRole('button', { name: /drawbridge/i }).click();
+  await expect(page.locator('.grimoire__book .spell')).toBeVisible();
+  const first = await page.locator('.spell__title').innerText();
+  await page.keyboard.press('ArrowRight');
+  await expect(page.locator('.grimoire__count')).toContainText('Page 2');
+  expect(await page.locator('.spell__title').innerText()).not.toBe(first);
+  await page.keyboard.press('ArrowLeft');
+  await expect(page.locator('.grimoire__count')).toContainText('Page 1');
+  await page.locator('.grimoire select').selectOption({ index: 1 });
+  const doi = page.locator('.spell a[href^="https://doi.org/"]');
+  await page.locator('.grimoire select').selectOption('all');
+  for (let i = 0; i < 12 && (await doi.count()) === 0; i++) await page.keyboard.press('ArrowRight');
+  await expect(doi.first()).toHaveAttribute('rel', 'noopener noreferrer');
+  expect(await axeClean(page)).toEqual([]);
+});
+
+test('lab lever toggles aria-pressed and is accessible', async ({ page }) => {
+  await enter(page);
+  await goScene(page, 'Laboratory');
+  const lever = page.getByRole('button', { name: 'Pull the lever' });
+  await expect(lever).toHaveAttribute('aria-pressed', 'false');
+  await lever.click();
+  await expect(lever).toHaveAttribute('aria-pressed', 'true');
+  expect(await axeClean(page)).toEqual([]);
+});
+
+test('gazette lists news with terms and axe passes', async ({ page }) => {
+  await enter(page);
+  await goScene(page, 'Gazette');
+  await expect(page.locator('.gazette__item').first()).toBeVisible();
+  await expect(page.locator('.gazette__lic').first()).toContainText('Terms');
+  expect(await axeClean(page)).toEqual([]);
+});
+
+test('reduced motion stops window flicker', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await enter(page);
+  await goScene(page, 'Castle');
+  const anim = await page
+    .locator('.castle__win')
+    .first()
+    .evaluate((e) => getComputedStyle(e).animationName);
+  expect(anim).toBe('none');
+});

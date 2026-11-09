@@ -436,3 +436,7 @@ npm run assets:credits            # 生成 CREDITS.md
 - [ ] deploy.yml 与线上验证
 - [ ] 页脚链接 CREDITS.md
 - [ ] 录制演示视频,彩排演示脚本
+
+## v3 grimoire (FEAT-002)
+
+Done: castle, laboratory, library (grimoire) and gazette scenes with unit and Playwright/axe tests.
