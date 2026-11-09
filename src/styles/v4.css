@@ -604,3 +604,73 @@
 .figure--werewolf svg {
   filter: drop-shadow(0 0 3px #b9a7e0) drop-shadow(0 0 8px rgba(185, 167, 224, 0.6));
 }
+
+/* ---- Laboratory: the creature sits up and wanders (voltage above 70) ---- */
+.lab__walker {
+  display: none;
+  transform: translate(300px, 308px);
+}
+.lab--awake .lab__walker {
+  display: inline;
+}
+.lab--awake .lab__monster {
+  display: none;
+}
+.lab__walker {
+  transition: transform 0.7s ease-in-out;
+}
+.lab__walker-flip {
+  transition: transform 0.2s linear;
+}
+.lab__leg,
+.lab__walker-arm {
+  transform-box: fill-box;
+  transform-origin: 50% 0;
+  transition: transform 0.5s ease-in-out;
+}
+.lab__walker-arm {
+  transform-origin: 0 50%;
+}
+/* Seated: legs stick out forward over the slab edge, arms resting. */
+.lab--awake .lab__leg {
+  transform: rotate(-80deg);
+}
+.lab--walking .lab__leg--a {
+  animation: lab-step 0.7s ease-in-out infinite alternate;
+}
+.lab--walking .lab__leg--b {
+  animation: lab-step 0.7s ease-in-out infinite alternate-reverse;
+}
+.lab--walking .lab__walker-arm {
+  animation: lab-arm 1.4s ease-in-out infinite alternate;
+}
+@keyframes lab-step {
+  from {
+    transform: rotate(-22deg);
+  }
+  to {
+    transform: rotate(22deg);
+  }
+}
+@keyframes lab-arm {
+  from {
+    transform: rotate(-6deg);
+  }
+  to {
+    transform: rotate(6deg);
+  }
+}
+.lab--walking .lab__leg {
+  transform: rotate(0);
+}
+:root[data-reduced-motion='true'] .lab__walker,
+:root[data-safe-mode='true'] .lab__walker,
+:root[data-reduced-motion='true'] .lab__walker-flip,
+:root[data-safe-mode='true'] .lab__walker-flip,
+:root[data-reduced-motion='true'] .lab__leg,
+:root[data-safe-mode='true'] .lab__leg,
+:root[data-reduced-motion='true'] .lab__walker-arm,
+:root[data-safe-mode='true'] .lab__walker-arm {
+  transition: none;
+  animation: none;
+}

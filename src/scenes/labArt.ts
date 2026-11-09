@@ -92,6 +92,17 @@ export const LAB_SVG = `<svg class="lab__svg" viewBox="0 0 640 400" role="img" a
     </g>
     <g class="lab__stirrups"><rect x="170" y="262" width="270" height="8" fill="#6a6a72" opacity="0.7"/></g>
   </g>
+  <g class="lab__walker"><g class="lab__walker-flip">
+    <g class="lab__legs"><rect class="lab__leg lab__leg--a" x="-13" y="-40" width="11" height="40" rx="3" fill="#2a2833"/><rect class="lab__leg lab__leg--b" x="2" y="-40" width="11" height="40" rx="3" fill="#2a2833"/></g>
+    <rect x="-17" y="-88" width="34" height="52" rx="5" fill="#d9d2c0"/>
+    <path d="M-17 -60 h34 M-6 -88 v52" stroke="#bfb8a4" stroke-width="2" fill="none" stroke-dasharray="4 3"/>
+    <g class="lab__walker-arm"><rect x="4" y="-84" width="28" height="9" rx="4" fill="#7a8a62"/><path d="M14 -84 v9 M22 -84 v9" stroke="#1d1a22" stroke-width="1.2"/></g>
+    <rect x="-14" y="-114" width="28" height="26" rx="3" fill="#7a8a62"/>
+    <rect x="-15" y="-117" width="30" height="8" fill="#0a0710"/>
+    <path d="M-14 -100 h-5 M14 -100 h5" stroke="#9aa0ae" stroke-width="3"/>
+    <circle class="lab__eye" cx="-3" cy="-102" r="2.4" fill="#ffd23a"/><circle class="lab__eye" cx="7" cy="-102" r="2.4" fill="#ffd23a"/>
+    <path d="M-6 -93 h16" stroke="#1d1a22" stroke-width="1.5" stroke-dasharray="3 2"/>
+  </g></g>
   <g class="lab__assistant" fill="#07050d">
     <path d="M492 330 Q476 280 496 262 Q512 244 530 252 Q548 262 540 300 L548 330 Z"/>
     <circle cx="520" cy="244" r="12"/>
