@@ -66,8 +66,8 @@ export const FIGURES: Record<string, Figure> = {
     label: 'Sleepwalker with outstretched arms',
     caption: 'The sleepwalker drifts a step forward with eyes closed, then freezes.',
     move: 'creep',
-    side: 'right',
-    bottom: 9,
+    side: 'left',
+    bottom: 20,
     svg: `<path d="M24 28 L20 70 L40 70 L36 28 Z" fill="#cfc8d8"/>
       <path class="figure__arm" d="M36 32 L58 32 M24 32 L4 32" stroke="#cfc8d8" stroke-width="4" stroke-linecap="round"/>
       <path d="M24 70 V90 M36 70 V90" stroke="#0a0710" stroke-width="4"/>
@@ -94,9 +94,9 @@ export const FIGURES: Record<string, Figure> = {
     move: 'howl',
     side: 'right',
     bottom: 10,
-    svg: `<path d="M14 90 L18 56 Q22 40 34 40 L46 52 L44 90 Z" fill="#0a0710"/>
-      <path d="M44 80 Q60 78 62 66 Q56 72 46 70" fill="#0a0710"/>
-      <g class="figure__head"><path d="M26 44 L22 24 L30 30 L38 24 L36 40 L50 18 L54 22 L40 46 Z" fill="#0a0710"/>
+    svg: `<path d="M14 90 L18 56 Q22 40 34 40 L46 52 L44 90 Z" fill="#3b3350" stroke="#b9a7e0" stroke-width="1"/>
+      <path d="M44 80 Q60 78 62 66 Q56 72 46 70" fill="#3b3350" stroke="#b9a7e0" stroke-width="1"/>
+      <g class="figure__head"><path d="M26 44 L22 24 L30 30 L38 24 L36 40 L50 18 L54 22 L40 46 Z" fill="#3b3350" stroke="#b9a7e0" stroke-width="1"/>
       <circle class="figure__eye" cx="32" cy="34" r="1.5"/></g>`,
   },
 };
@@ -119,7 +119,7 @@ export function figureButton(f: Figure): HTMLButtonElement {
   b.type = 'button';
   b.className = `figure figure--${f.id} figure--${f.side}`;
   b.dataset.figure = f.id;
-  b.style.bottom = `${f.bottom}%`;
+  b.style.bottom = `calc(${f.bottom}% + 9rem)`;
   b.setAttribute('aria-label', f.label);
   b.innerHTML = `<svg viewBox="0 0 70 92" aria-hidden="true" focusable="false">${f.svg}</svg>`;
   return b;

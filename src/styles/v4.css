@@ -589,3 +589,18 @@
   background: #6b1d1d;
   color: #f8ecd0;
 }
+
+/* ---- Safe space so the fixed scene nav never covers scene content ---- */
+.scene-gazette,
+.scene-library,
+.scene-lab,
+.scene-castle {
+  position: fixed;
+  inset: 0;
+  overflow-y: auto;
+  box-sizing: border-box;
+  padding-bottom: 13rem;
+}
+.figure--werewolf svg {
+  filter: drop-shadow(0 0 3px #b9a7e0) drop-shadow(0 0 8px rgba(185, 167, 224, 0.6));
+}
