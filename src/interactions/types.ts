@@ -12,6 +12,8 @@ export interface InteractionContext {
   /** Announce text to the aria-live region. */
   announce: (message: string) => void;
   addScore: (points: number) => void;
+  /** Record an asset (by URL) as discovered in the collection book. */
+  discover?: (assetUrl: string) => void;
 }
 
 export interface Interaction {

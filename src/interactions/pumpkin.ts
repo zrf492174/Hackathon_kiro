@@ -39,6 +39,7 @@ export const pumpkin: Interaction = {
         else if (r === 'solved') {
           ctx.announce('A hidden door creaks open.');
           ctx.addScore(50);
+          for (const u of urls) ctx.discover?.(u);
           ctx.root.querySelector('.hidden-door')?.removeAttribute('hidden');
         }
       });

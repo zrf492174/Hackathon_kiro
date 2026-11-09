@@ -220,3 +220,224 @@
 .bats {
   z-index: 14;
 }
+
+/* ---- v2: scenes, navigation, collection, extended interactions ---- */
+.scene-nav {
+  position: fixed;
+  top: 0.5rem;
+  right: 0.75rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  z-index: 30;
+}
+.scene-nav button,
+.book-btn,
+.book-close,
+.candle-btn {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 0.9rem;
+  color: var(--ghost);
+  background: var(--purple);
+  border: 1px solid var(--pumpkin);
+  cursor: pointer;
+}
+.scene-nav button[aria-current='page'] {
+  background: var(--pumpkin);
+  color: var(--bg);
+}
+.book-btn {
+  position: fixed;
+  bottom: 3.5rem;
+  right: 0.75rem;
+  z-index: 30;
+}
+.scene-title {
+  position: fixed;
+  top: 3.5rem;
+  left: 0.75rem;
+  color: var(--candle);
+  z-index: 20;
+}
+.book {
+  position: fixed;
+  inset: 10% 8%;
+  overflow: auto;
+  padding: 1rem 1.25rem;
+  background: var(--bg);
+  border: 2px solid var(--pumpkin);
+  z-index: 100;
+}
+.book a {
+  color: var(--candle);
+}
+
+/* global candle brightness */
+html::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: #000;
+  opacity: calc(1 - var(--brightness, 1));
+  transition: opacity 0.4s;
+  z-index: 40;
+}
+
+.candle-row {
+  position: fixed;
+  bottom: 4rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 1rem;
+  z-index: 20;
+}
+.candle-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+}
+.candle-btn__flame {
+  width: 12px;
+  height: 18px;
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  background: var(--candle);
+  box-shadow: 0 0 14px var(--pumpkin);
+}
+.candle-btn__wax {
+  width: 14px;
+  height: 36px;
+  background: var(--ghost);
+}
+.candle-btn--out .candle-btn__flame {
+  opacity: 0;
+}
+
+.eyes-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 8;
+}
+.eyes {
+  position: absolute;
+  display: flex;
+  gap: 14px;
+  transition: opacity 0.3s;
+}
+.eyes span {
+  width: 12px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--toxic);
+  box-shadow: 0 0 10px var(--toxic);
+}
+.eyes--gone {
+  opacity: 0;
+}
+
+.lightning {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 6;
+}
+.lightning__flash {
+  position: absolute;
+  inset: 0;
+  background: #dfe6ff;
+  opacity: 0;
+}
+.lightning__flash--on {
+  animation: lightning-flash 0.45s ease-out;
+}
+@keyframes lightning-flash {
+  0% {
+    opacity: 0.45;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.moon-btn {
+  position: fixed;
+  top: 4rem;
+  right: 0.75rem;
+  width: 56px;
+  height: 56px;
+  padding: 0;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  z-index: 12;
+}
+.moon-btn img {
+  width: 100%;
+  height: 100%;
+}
+.blood-moon .moon-btn img {
+  filter: sepia(1) saturate(6) hue-rotate(-30deg);
+}
+.blood-moon body {
+  background: #1a0508;
+}
+.pumpkin-king {
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 1rem 1.5rem;
+  color: var(--bg);
+  background: var(--pumpkin);
+  font-family: var(--font-title);
+  font-size: 1.6rem;
+  z-index: 90;
+  animation: king-in 0.6s ease-out;
+}
+.pumpkin-king--static {
+  animation: none;
+}
+@keyframes king-in {
+  from {
+    transform: translate(-50%, -50%) scale(0.2);
+  }
+}
+.rain-ghost {
+  position: fixed;
+  top: -100px;
+  width: 64px;
+  pointer-events: none;
+  z-index: 85;
+  animation: ghost-rain 4s linear forwards;
+}
+.rain-ghost--static {
+  top: 20%;
+  animation: none;
+  opacity: 0.8;
+}
+@keyframes ghost-rain {
+  to {
+    transform: translateY(120vh);
+  }
+}
+
+/* Touch devices: 44px minimum targets, no scroll hijack while dragging the flashlight */
+:root[data-touch='true'] button,
+:root[data-touch='true'] a {
+  min-width: 44px;
+  min-height: 44px;
+}
+:root[data-touch='true'] .flashlight {
+  touch-action: none;
+}
+:root[data-safe-mode='true'] .lightning__flash,
+:root[data-reduced-motion='true'] .lightning__flash {
+  display: none;
+}
+:root[data-reduced-motion='true'] .eyes {
+  transition: none;
+}

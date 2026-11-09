@@ -9,6 +9,8 @@ export interface AssetRecord {
   author: string;
   license: string;
   status: 'approved' | 'pending' | 'rejected';
+  licenseUrl?: string;
+  source?: { pageUrl?: string };
 }
 
 export interface AssetManifest {
@@ -42,6 +44,17 @@ export class AssetLibrary {
     const real = this.approved(category).filter((a) => !a.id.startsWith('placeholder-'));
     const files = real.length > 0 ? real.map((a) => a.file) : (PLACEHOLDERS[category] ?? []);
     return files.map((f) => this.base + 'assets/' + f);
+  }
+
+  /** All approved image records (used by the collection book). */
+  records(): AssetRecord[] {
+    return (this.manifest?.assets ?? []).filter((a) => a.status === 'approved');
+  }
+
+  /** Find the record that a loaded URL belongs to. */
+  recordForUrl(url: string): AssetRecord | null {
+    const hit = this.records().find((a) => url.endsWith('assets/' + a.file));
+    return hit ?? null;
   }
 
   /** Pick one URL at random (rng injectable). Returns null for an unknown category. */
