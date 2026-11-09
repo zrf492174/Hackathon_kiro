@@ -1,0 +1,16 @@
+{
+  "articles": [
+    {
+      "url": "https://news.example.com/halloween-1",
+      "title": "Halloween spending soars",
+      "domain": "news.example.com",
+      "seendate": "20241030T120000Z"
+    },
+    {
+      "url": "https://news.example.com/pumpkin-2",
+      "title": "Giant pumpkin wins",
+      "domain": "news.example.com",
+      "seendate": "20241029T080000Z"
+    }
+  ]
+}

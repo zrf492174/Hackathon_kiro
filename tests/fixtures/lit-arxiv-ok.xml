@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:arxiv="http://arxiv.org/schemas/atom">
+  <entry>
+    <id>http://arxiv.org/abs/2001.00001v1</id>
+    <published>2020-01-02T00:00:00Z</published>
+    <title>Pumpkin &amp; Gourd
+      Growth</title>
+    <summary>Ignored summary.</summary>
+    <author><name>Gord Orange</name></author>
+    <author><name>Pat Kin</name></author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2002.00002v2</id>
+    <published>2021-03-04T00:00:00Z</published>
+    <title>Ghost lights</title>
+    <arxiv:doi>10.1234/ghost.4</arxiv:doi>
+    <author><name>Will O. Wisp</name></author>
+  </entry>
+</feed>

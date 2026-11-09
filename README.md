@@ -30,6 +30,7 @@ See [PLAN.md](PLAN.md) for the full plan (Chinese).
 - `npm run test:e2e` run Playwright and axe accessibility tests (needs `npx playwright install chromium`)
 - `npm run lint` run ESLint and Prettier checks
 - `npm run assets:collect` / `assets:collect:all` collect openly licensed assets (API keys via env)
+- `npm run lit:collect` gathers Halloween-themed paper and news metadata (OpenAlex, Crossref, Europe PMC, arXiv, GDELT, Wikinews) into `public/data/grimoire.json` and `public/data/gazette.json`. Metadata only, no full text; abstract snippets (max 300 chars) only where the licence allows. Use `-- --offline --dry-run` to run against test fixtures without network or writes. `npm run lit:verify` validates the committed datasets. Entries flagged `sample: true` are hand-seeded and pending confirmation. A weekly workflow opens a PR with updates.
 - `npm run assets:verify` validate the manifest and files
 - `npm run assets:credits` regenerate [CREDITS.md](CREDITS.md)
 
