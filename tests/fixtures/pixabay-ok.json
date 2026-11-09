@@ -1,0 +1,16 @@
+{
+  "hits": [
+    {
+      "pageURL": "https://pixabay.com/p/1",
+      "largeImageURL": "https://cdn.example.org/a.jpg",
+      "user": "zed",
+      "user_id": 7,
+      "imageWidth": 1200,
+      "imageHeight": 800,
+      "tags": "ghost, night"
+    },
+    {
+      "largeImageURL": "https://cdn.example.org/b.jpg"
+    }
+  ]
+}

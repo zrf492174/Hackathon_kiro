@@ -23,6 +23,7 @@ export const popupGhost: Interaction = {
     popupGhost.destroy();
     const host = document.createElement('div');
     host.className = 'ghost-layer';
+    host.setAttribute('role', 'group');
     host.setAttribute('aria-label', 'Wandering ghosts');
     ctx.root.appendChild(host);
     layer = host;

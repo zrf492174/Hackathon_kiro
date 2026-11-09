@@ -1,0 +1,26 @@
+{
+  "results": [
+    {
+      "description": "Foggy graveyard",
+      "width": 3000,
+      "height": 2000,
+      "urls": {
+        "regular": "https://img.example.org/g.jpg"
+      },
+      "links": {
+        "html": "https://unsplash.com/photos/g"
+      },
+      "user": {
+        "name": "Kim",
+        "links": {
+          "html": "https://unsplash.com/@kim"
+        }
+      },
+      "tags": [
+        {
+          "title": "graveyard"
+        }
+      ]
+    }
+  ]
+}

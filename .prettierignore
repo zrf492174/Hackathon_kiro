@@ -5,3 +5,6 @@ package-lock.json
 PLAN.md
 CREDITS.md
 public/assets/manifest.json
+playwright-report
+test-results
+.lighthouseci

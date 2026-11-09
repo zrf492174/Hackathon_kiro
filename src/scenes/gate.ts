@@ -13,7 +13,7 @@ export function enterGate(ctx: InteractionContext): void {
   stage.className = 'gate-stage';
   stage.setAttribute('aria-label', 'The haunted gate');
   stage.innerHTML = `
-    <p class="score" aria-label="Score">Score: <span id="score">0</span></p>
+    <p class="score">Score: <span id="score">0</span></p>
     <div class="hidden-door" hidden role="img" aria-label="A hidden door, now open"></div>`;
   ctx.root.appendChild(stage);
   score = 0;
