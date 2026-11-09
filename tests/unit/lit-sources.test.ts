@@ -72,11 +72,40 @@ describe('crossref', () => {
 describe('europepmc', () => {
   it('gates abstract snippets on open access', () => {
     const r = parseEuropePmc(js('lit-europepmc-ok.json'));
-    expect(r).toHaveLength(2);
+    expect(r).toHaveLength(3);
     expect(r[0].abstractSnippet).toBe('Background Foxfire glows in the dark.');
-    expect(r[0].license).toBe('CC-BY-4.0');
-    expect(r[1].abstractSnippet).toBeUndefined();
-    expect(r[1].url).toBe('https://europepmc.org/article/MED/222');
+    expect(r[0].license).toBe('CC0-1.0');
+    expect(r[2].abstractSnippet).toBeUndefined();
+    expect(r[2].url).toBe('https://europepmc.org/article/MED/222');
+  });
+  it('never claims CC-BY or keeps a snippet for non-CC-BY open access records', () => {
+    const r = parseEuropePmc(js('lit-europepmc-ok.json'));
+    const nc = r.find((x) => x.doi === '10.1234/nc.5')!;
+    expect(nc.abstractSnippet).toBeUndefined();
+    expect(nc.license).toBe('Europe PMC metadata');
+    expect(r.some((x) => x.license === 'CC-BY-4.0')).toBe(false);
+    const noLicense = parseEuropePmc({
+      resultList: {
+        result: [{ id: '1', source: 'MED', title: 'T', isOpenAccess: 'Y', abstractText: 'text' }],
+      },
+    });
+    expect(noLicense[0].abstractSnippet).toBeUndefined();
+    const byVersionless = parseEuropePmc({
+      resultList: {
+        result: [
+          {
+            id: '2',
+            source: 'MED',
+            title: 'T',
+            isOpenAccess: 'Y',
+            license: 'cc by',
+            abstractText: 'x',
+          },
+        ],
+      },
+    });
+    expect(byVersionless[0].abstractSnippet).toBeUndefined();
+    expect(byVersionless[0].license).not.toBe('CC-BY-4.0');
   });
   it('drops missing fields, empty, 429', async () => {
     expect(parseEuropePmc(js('lit-europepmc-missing.json'))).toEqual([]);

@@ -35,6 +35,11 @@ export async function mountGazette(host: HTMLElement): Promise<Gazette> {
         <svg viewBox="0 0 60 30" width="60" height="30"><path d="M2 20 Q20 0 38 12 L58 8 L44 16 Q36 28 18 26 Z" fill="#111"/><circle cx="34" cy="12" r="1.5" fill="#e8d8b0"/></svg>
         Delivered by raven
       </p>
+      ${
+        data.records.every((r) => r.sample)
+          ? '<p class="gazette__notice" role="note">These are reference links, not news stories, until live news is collected.</p>'
+          : ''
+      }
       <ul class="gazette__list">${data.records.map(renderItem).join('')}</ul>
       <p class="gazette__terms">${escapeHtml(data.meta.terms ?? '')}</p>`;
   }

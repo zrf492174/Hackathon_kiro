@@ -3,113 +3,106 @@
     "generatedAt": "2025-01-01T00:00:00.000Z",
     "kind": "news",
     "sources": ["seed"],
-    "terms": "Headline, link, domain and date only. No article text is stored. Wikinews items are CC BY 2.5 / CC BY-SA (Wikinews contributors); all other items are links to the original publishers."
+    "terms": "Headline, link, domain and date only. No article text is stored. Wikinews items are CC BY 2.5 / CC BY-SA (Wikinews contributors); Wikipedia reference links carry the article title only (text CC BY-SA 4.0, Wikipedia contributors); all other items are links to the original publishers."
   },
   "records": [
     {
       "kind": "news",
       "id": "url:https://en.wikipedia.org/wiki/Halloween",
-      "title": "Halloween: origins, customs and spread",
+      "title": "Halloween",
       "authors": [],
-      "year": 2025,
-      "venue": "Wikipedia",
+      "venue": "Wikipedia (reference article)",
       "url": "https://en.wikipedia.org/wiki/Halloween",
       "source": "seed",
-      "license": "Link and headline metadata only",
+      "license": "Title and link only; Wikipedia text is CC BY-SA 4.0 (Wikipedia contributors)",
       "topic": "halloween-news",
       "fetchedAt": "2025-01-01T00:00:00.000Z",
       "sample": true,
-      "note": "Placeholder reference link seeded until the first live gazette collect replaces it with dated news."
+      "note": "Reference link, not a news story. Seeded until the first live gazette collect replaces it with dated news."
     },
     {
       "kind": "news",
       "id": "url:https://en.wikipedia.org/wiki/Jack-o%27-lantern",
-      "title": "Jack-o'-lantern: the carved pumpkin tradition",
+      "title": "Jack-o'-lantern",
       "authors": [],
-      "year": 2025,
-      "venue": "Wikipedia",
+      "venue": "Wikipedia (reference article)",
       "url": "https://en.wikipedia.org/wiki/Jack-o%27-lantern",
       "source": "seed",
-      "license": "Link and headline metadata only",
+      "license": "Title and link only; Wikipedia text is CC BY-SA 4.0 (Wikipedia contributors)",
       "topic": "halloween-news",
       "fetchedAt": "2025-01-01T00:00:00.000Z",
       "sample": true,
-      "note": "Placeholder reference link seeded until the first live gazette collect replaces it with dated news."
+      "note": "Reference link, not a news story. Seeded until the first live gazette collect replaces it with dated news."
     },
     {
       "kind": "news",
       "id": "url:https://en.wikipedia.org/wiki/Frankenstein",
-      "title": "Frankenstein: the novel and its legacy",
+      "title": "Frankenstein",
       "authors": [],
-      "year": 2025,
-      "venue": "Wikipedia",
+      "venue": "Wikipedia (reference article)",
       "url": "https://en.wikipedia.org/wiki/Frankenstein",
       "source": "seed",
-      "license": "Link and headline metadata only",
+      "license": "Title and link only; Wikipedia text is CC BY-SA 4.0 (Wikipedia contributors)",
       "topic": "frankenstein",
       "fetchedAt": "2025-01-01T00:00:00.000Z",
       "sample": true,
-      "note": "Placeholder reference link seeded until the first live gazette collect replaces it with dated news."
+      "note": "Reference link, not a news story. Seeded until the first live gazette collect replaces it with dated news."
     },
     {
       "kind": "news",
       "id": "url:https://en.wikipedia.org/wiki/Galvanism",
-      "title": "Galvanism and the age of animal electricity",
+      "title": "Galvanism",
       "authors": [],
-      "year": 2025,
-      "venue": "Wikipedia",
+      "venue": "Wikipedia (reference article)",
       "url": "https://en.wikipedia.org/wiki/Galvanism",
       "source": "seed",
-      "license": "Link and headline metadata only",
+      "license": "Title and link only; Wikipedia text is CC BY-SA 4.0 (Wikipedia contributors)",
       "topic": "frankenstein",
       "fetchedAt": "2025-01-01T00:00:00.000Z",
       "sample": true,
-      "note": "Placeholder reference link seeded until the first live gazette collect replaces it with dated news."
+      "note": "Reference link, not a news story. Seeded until the first live gazette collect replaces it with dated news."
     },
     {
       "kind": "news",
       "id": "url:https://en.wikipedia.org/wiki/Will-o%27-the-wisp",
-      "title": "Will-o'-the-wisp: ghost lights over marshes",
+      "title": "Will-o'-the-wisp",
       "authors": [],
-      "year": 2025,
-      "venue": "Wikipedia",
+      "venue": "Wikipedia (reference article)",
       "url": "https://en.wikipedia.org/wiki/Will-o%27-the-wisp",
       "source": "seed",
-      "license": "Link and headline metadata only",
+      "license": "Title and link only; Wikipedia text is CC BY-SA 4.0 (Wikipedia contributors)",
       "topic": "foxfire",
       "fetchedAt": "2025-01-01T00:00:00.000Z",
       "sample": true,
-      "note": "Placeholder reference link seeded until the first live gazette collect replaces it with dated news."
+      "note": "Reference link, not a news story. Seeded until the first live gazette collect replaces it with dated news."
     },
     {
       "kind": "news",
       "id": "url:https://en.wikipedia.org/wiki/Sleep_paralysis",
-      "title": "Sleep paralysis: the night-mare explained",
+      "title": "Sleep paralysis",
       "authors": [],
-      "year": 2025,
-      "venue": "Wikipedia",
+      "venue": "Wikipedia (reference article)",
       "url": "https://en.wikipedia.org/wiki/Sleep_paralysis",
       "source": "seed",
-      "license": "Link and headline metadata only",
+      "license": "Title and link only; Wikipedia text is CC BY-SA 4.0 (Wikipedia contributors)",
       "topic": "sleep-paralysis",
       "fetchedAt": "2025-01-01T00:00:00.000Z",
       "sample": true,
-      "note": "Placeholder reference link seeded until the first live gazette collect replaces it with dated news."
+      "note": "Reference link, not a news story. Seeded until the first live gazette collect replaces it with dated news."
     },
     {
       "kind": "news",
       "id": "url:https://en.wikipedia.org/wiki/Samhain",
-      "title": "Samhain: the Gaelic festival",
+      "title": "Samhain",
       "authors": [],
-      "year": 2025,
-      "venue": "Wikipedia",
+      "venue": "Wikipedia (reference article)",
       "url": "https://en.wikipedia.org/wiki/Samhain",
       "source": "seed",
-      "license": "Link and headline metadata only",
+      "license": "Title and link only; Wikipedia text is CC BY-SA 4.0 (Wikipedia contributors)",
       "topic": "halloween-history",
       "fetchedAt": "2025-01-01T00:00:00.000Z",
       "sample": true,
-      "note": "Placeholder reference link seeded until the first live gazette collect replaces it with dated news."
+      "note": "Reference link, not a news story. Seeded until the first live gazette collect replaces it with dated news."
     }
   ]
 }

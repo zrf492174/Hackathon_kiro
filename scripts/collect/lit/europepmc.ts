@@ -9,10 +9,23 @@ interface EpmcResult {
   pubYear?: string;
   journalTitle?: string;
   isOpenAccess?: string;
+  license?: string;
   abstractText?: string;
 }
 
-/** Abstract snippets only for open-access records (licence recorded as CC-BY-4.0 family minimum). */
+/**
+ * Maps Europe PMC's explicit licence field. Open access alone says nothing about the licence
+ * (CC BY-NC, CC BY-ND and publisher terms are all open access), so only an explicit CC0 record
+ * keeps an abstract snippet. Versionless "cc by" is recorded as-is and never snippeted.
+ */
+function licenseOf(r: EpmcResult): { license: string; snippetLicense?: string } {
+  const raw = r.license?.trim().toLowerCase();
+  if (r.isOpenAccess === 'Y' && raw === 'cc0')
+    return { license: 'CC0-1.0', snippetLicense: 'CC0-1.0' };
+  if (r.isOpenAccess === 'Y' && raw === 'cc by') return { license: 'CC BY (version unstated)' };
+  return { license: 'Europe PMC metadata' };
+}
+
 export function parseEuropePmc(json: { resultList?: { result?: EpmcResult[] } }): RawRecord[] {
   const out: RawRecord[] = [];
   for (const r of json.resultList?.result ?? []) {
@@ -24,7 +37,7 @@ export function parseEuropePmc(json: { resultList?: { result?: EpmcResult[] } })
         : undefined;
     const title = r.title?.trim().replace(/\.$/, '');
     if (!title || !url) continue;
-    const open = r.isOpenAccess === 'Y';
+    const { license, snippetLicense } = licenseOf(r);
     out.push({
       kind: 'paper',
       id: doi ? `doi:${doi}` : `epmc:${r.source}:${r.id}`,
@@ -38,9 +51,9 @@ export function parseEuropePmc(json: { resultList?: { result?: EpmcResult[] } })
       venue: r.journalTitle,
       doi,
       url,
-      abstractSnippet: open ? snippetFor('CC-BY-4.0', r.abstractText) : undefined,
+      abstractSnippet: snippetLicense ? snippetFor(snippetLicense, r.abstractText) : undefined,
       source: 'europepmc',
-      license: open ? 'CC-BY-4.0' : 'Europe PMC metadata',
+      license,
     });
   }
   return out;

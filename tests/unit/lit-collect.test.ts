@@ -1,4 +1,12 @@
-import { cpSync, mkdtempSync, readFileSync, rmSync, existsSync, mkdirSync } from 'node:fs';
+import {
+  writeFileSync,
+  cpSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  existsSync,
+  mkdirSync,
+} from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
@@ -121,5 +129,29 @@ describe('collectLit', () => {
     const urls = r.news.records.map((x) => x.url);
     expect(new Set(urls).size).toBe(urls.length);
     expect(verifyLit(root)).toEqual([]);
+  });
+  it('prefers fresh records over placeholder seeds when the cap is reached', async () => {
+    const root = sandbox();
+    const cfgPath = join(root, 'scripts/collect/lit/config.json');
+    const cfg = JSON.parse(readFileSync(cfgPath, 'utf8'));
+    cfg.maxNews = 3;
+    writeFileSync(cfgPath, JSON.stringify(cfg));
+    const fetchImpl = (async () =>
+      new Response(readFileSync('tests/fixtures/lit-gdelt-ok.json', 'utf8'))) as typeof fetch;
+    const r = await collectLit({ all: true, offline: false, dryRun: true }, root, {
+      ...quiet,
+      fetchImpl,
+    });
+    expect(r.news.records.length).toBeLessThanOrEqual(3);
+    expect(r.news.records.some((x) => x.source === 'gdelt')).toBe(true);
+    expect(r.news.records.some((x) => x.sample)).toBe(false);
+  });
+  it('seed gazette records are honest reference links', () => {
+    const news = JSON.parse(readFileSync('public/data/gazette.json', 'utf8'));
+    for (const x of news.records) {
+      expect(x.year).toBeUndefined();
+      expect(x.title).toBe(decodeURIComponent(x.url.split('/wiki/')[1]).replace(/_/g, ' '));
+    }
+    expect(news.meta.terms).toContain('Wikipedia');
   });
 });

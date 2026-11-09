@@ -10,7 +10,20 @@
         "pubYear": "2018",
         "journalTitle": "Mycology Now",
         "isOpenAccess": "Y",
-        "abstractText": "<h4>Background</h4> Foxfire glows in the dark."
+        "abstractText": "<h4>Background</h4> Foxfire glows in the dark.",
+        "license": "cc0"
+      },
+      {
+        "id": "333",
+        "source": "MED",
+        "doi": "10.1234/nc.5",
+        "title": "Non commercial glow.",
+        "authorString": "Lux L.",
+        "pubYear": "2019",
+        "journalTitle": "Open NC",
+        "isOpenAccess": "Y",
+        "license": "cc by-nc",
+        "abstractText": "Must not be stored."
       },
       {
         "id": "222",

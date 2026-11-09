@@ -21,18 +21,16 @@
     },
     {
       "kind": "paper",
-      "id": "book:aldini-1803",
-      "title": "Essai theorique et experimental sur le galvanisme",
+      "id": "book:aldini-1804",
+      "title": "Essai théorique et expérimental sur le galvanisme",
       "authors": ["Giovanni Aldini"],
-      "year": 1803,
-      "venue": "Fournier",
-      "url": "https://en.wikipedia.org/wiki/Giovanni_Aldini",
+      "year": 1804,
+      "venue": "Fournier fils",
+      "url": "https://archive.org/details/essaithoriqueete01aldi",
       "source": "seed",
       "license": "Bibliographic metadata (facts)",
       "topic": "frankenstein",
-      "fetchedAt": "2025-01-01T00:00:00.000Z",
-      "sample": true,
-      "note": "Hand-seeded book entry; link is a reference page, confirm a scan URL on the next live collect."
+      "fetchedAt": "2025-01-01T00:00:00.000Z"
     },
     {
       "kind": "paper",
@@ -46,9 +44,7 @@
       "source": "seed",
       "license": "Bibliographic metadata (facts)",
       "topic": "frankenstein",
-      "fetchedAt": "2025-01-01T00:00:00.000Z",
-      "sample": true,
-      "note": "Seeded from memory; DOI to be confirmed by a live collect."
+      "fetchedAt": "2025-01-01T00:00:00.000Z"
     },
     {
       "kind": "paper",
@@ -76,9 +72,7 @@
       "source": "seed",
       "license": "Bibliographic metadata (facts)",
       "topic": "spiders",
-      "fetchedAt": "2025-01-01T00:00:00.000Z",
-      "sample": true,
-      "note": "Seeded from memory; DOI to be confirmed by a live collect."
+      "fetchedAt": "2025-01-01T00:00:00.000Z"
     },
     {
       "kind": "paper",
@@ -92,9 +86,7 @@
       "source": "seed",
       "license": "Bibliographic metadata (facts)",
       "topic": "sleep-paralysis",
-      "fetchedAt": "2025-01-01T00:00:00.000Z",
-      "sample": true,
-      "note": "Seeded from memory; DOI to be confirmed by a live collect."
+      "fetchedAt": "2025-01-01T00:00:00.000Z"
     },
     {
       "kind": "paper",
@@ -163,14 +155,12 @@
       "source": "seed",
       "license": "Bibliographic metadata (facts)",
       "topic": "foxfire",
-      "fetchedAt": "2025-01-01T00:00:00.000Z",
-      "sample": true,
-      "note": "Seeded from memory; DOI to be confirmed by a live collect."
+      "fetchedAt": "2025-01-01T00:00:00.000Z"
     },
     {
       "kind": "paper",
       "id": "doi:10.1073/pnas.012577299",
-      "title": "Phylogenetic relationships among domesticated and wild species of Cucurbita (Cucurbitaceae) inferred from a mitochondrial gene",
+      "title": "Phylogenetic relationships among domesticated and wild species of Cucurbita (Cucurbitaceae) inferred from a mitochondrial gene: Implications for crop plant evolution and areas of origin",
       "authors": ["Sanjur O. I.", "Piperno D. R.", "Andres T. C.", "Wessel-Beaver L."],
       "year": 2002,
       "venue": "PNAS",
@@ -179,25 +169,21 @@
       "source": "seed",
       "license": "Bibliographic metadata (facts)",
       "topic": "pumpkin-biology",
-      "fetchedAt": "2025-01-01T00:00:00.000Z",
-      "sample": true,
-      "note": "Seeded from memory; title and DOI to be confirmed by a live collect."
+      "fetchedAt": "2025-01-01T00:00:00.000Z"
     },
     {
       "kind": "paper",
-      "id": "doi:10.1016/j.poetic.2018.10.001",
+      "id": "doi:10.1016/j.poetic.2019.01.002",
       "title": "Adrenaline junkies and white-knucklers: a quantitative study of fear management in haunted house visitors",
       "authors": ["Mathias Clasen", "Marc Andersen", "Uffe Schjoedt"],
       "year": 2019,
       "venue": "Poetics",
-      "doi": "10.1016/j.poetic.2018.10.001",
-      "url": "https://doi.org/10.1016/j.poetic.2018.10.001",
+      "doi": "10.1016/j.poetic.2019.01.002",
+      "url": "https://doi.org/10.1016/j.poetic.2019.01.002",
       "source": "seed",
       "license": "Bibliographic metadata (facts)",
       "topic": "fear-psychology",
-      "fetchedAt": "2025-01-01T00:00:00.000Z",
-      "sample": true,
-      "note": "Seeded from memory; DOI to be confirmed by a live collect."
+      "fetchedAt": "2025-01-01T00:00:00.000Z"
     },
     {
       "kind": "paper",

@@ -84,6 +84,24 @@ describe('rendering', () => {
     expect(renderSpell(rec(), 0, 1)).not.toContain('spell__abstract');
     expect(renderSpell(rec({ abstractSnippet: 'hi' }), 0, 1)).toContain('spell__abstract');
   });
+  it('neutralises XSS payloads in every record field', () => {
+    const evil = '"><img src=x onerror=alert(1)>';
+    const r = rec({
+      title: evil,
+      authors: [evil],
+      venue: evil,
+      abstractSnippet: evil,
+      license: evil,
+      topic: evil,
+      url: 'javascript:alert(1)',
+    });
+    for (const html of [renderSpell(r, 0, 1), renderItem(r)]) {
+      expect(html).not.toContain('<img');
+      expect(html).not.toContain('javascript:');
+    }
+    const doi = renderSpell(rec({ doi: evil }), 0, 1);
+    expect(doi).not.toContain('<img');
+  });
   it('renders gazette items with licence text', () => {
     const html = renderItem(rec({ title: '<b>n</b>', license: 'Link only' }));
     expect(html).toContain('&lt;b&gt;');

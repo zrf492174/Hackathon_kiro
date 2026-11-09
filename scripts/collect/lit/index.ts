@@ -59,7 +59,7 @@ export const NEWS_PATH = 'public/data/gazette.json';
 const TERMS = {
   paper:
     'Bibliographic metadata only (title, authors, year, venue, DOI, link). Short abstract snippets appear only where the source licence allows. No full text is stored; follow each link for the original work.',
-  news: 'Headline, link, domain and date only. No article text is stored. Wikinews items are CC BY 2.5 / CC BY-SA (Wikinews contributors); all other items are links to the original publishers.',
+  news: 'Headline, link, domain and date only. No article text is stored. Wikinews items are CC BY 2.5 / CC BY-SA (Wikinews contributors); Wikipedia reference links carry the article title only (text CC BY-SA 4.0, Wikipedia contributors); all other items are links to the original publishers.',
 };
 
 function readDataset(path: string, kind: 'paper' | 'news'): Dataset {
@@ -89,7 +89,11 @@ function build(
   cap: number,
   now: string,
 ): Dataset {
-  const records = dedupeRecords([...existing.records, ...fresh]).slice(0, cap);
+  // Fresh records win; placeholder seeds are only kept while no live data of that kind exists.
+  const kept = fresh.some((r) => !r.sample)
+    ? existing.records.filter((r) => !r.sample)
+    : existing.records;
+  const records = dedupeRecords([...fresh, ...kept]).slice(0, cap);
   const sources = [...new Set(records.map((r) => r.source))].sort();
   return { meta: { generatedAt: now, kind, sources, terms: TERMS[kind] }, records };
 }
