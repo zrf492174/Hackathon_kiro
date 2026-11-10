@@ -167,12 +167,41 @@
   width: 54px;
   height: 70px;
   padding: 0;
-  color: #cfcadc;
+  color: #c9cfc4;
   font: 700 0.7rem/1 serif;
-  background: linear-gradient(#5b586a, #3a374a);
-  border: 2px solid #1d1a26;
+  background:
+    radial-gradient(ellipse at 30% 12%, rgba(96, 128, 82, 0.55), transparent 55%),
+    linear-gradient(#59605b, #353b38);
+  border: 2px solid #171c19;
   border-radius: 28px 28px 2px 2px;
+  box-shadow: 0 0 18px rgba(255, 170, 80, 0.08);
   cursor: pointer;
+  transform: rotate(var(--lean, 0deg));
+  transform-origin: bottom center;
+}
+.stone:nth-child(8n + 1) {
+  --lean: -4deg;
+}
+.stone:nth-child(8n + 2) {
+  --lean: 3deg;
+}
+.stone:nth-child(8n + 3) {
+  --lean: -2deg;
+}
+.stone:nth-child(8n + 4) {
+  --lean: 5deg;
+}
+.stone:nth-child(8n + 5) {
+  --lean: -5deg;
+}
+.stone:nth-child(8n + 6) {
+  --lean: 2deg;
+}
+.stone:nth-child(8n + 7) {
+  --lean: -3deg;
+}
+.stone:nth-child(8n + 8) {
+  --lean: 4deg;
 }
 .stone--cross {
   height: 82px;
@@ -193,11 +222,13 @@
 .stone--angel {
   height: 88px;
   border-radius: 28px 28px 2px 2px;
-  background: linear-gradient(#7a7890, #4a4860);
 }
 .stone:hover,
 .stone--read {
-  background: linear-gradient(#7a7890, #4a4860);
+  background:
+    radial-gradient(ellipse at 30% 12%, rgba(110, 146, 94, 0.6), transparent 55%),
+    linear-gradient(#7b827a, #4a514c);
+  box-shadow: 0 0 22px rgba(255, 170, 80, 0.25);
 }
 .stone:focus-visible {
   outline: 3px solid var(--candle, #ffd36b);
@@ -212,31 +243,10 @@
   padding: 0.4rem 0.9rem;
   max-width: min(90vw, 520px);
   text-align: center;
-  color: #f3e6c4;
-  background: rgba(8, 5, 16, 0.88);
-  border: 1px solid #5a4a7a;
+  color: #f1dfb8;
+  background: rgba(10, 13, 11, 0.88);
+  border: 1px solid #6b5a3a;
   z-index: 7;
-}
-.yard__hand {
-  position: fixed;
-  left: 42%;
-  bottom: 7.5rem;
-  width: 44px;
-  z-index: 4;
-  animation: hand-rise 7s ease-out 1 both;
-  transform-origin: bottom;
-}
-.yard__hand--still {
-  animation: none;
-  transform: translateY(40%);
-}
-@keyframes hand-rise {
-  from {
-    transform: translateY(100%);
-  }
-  to {
-    transform: translateY(15%);
-  }
 }
 
 /* ---- Laboratory ---- */
