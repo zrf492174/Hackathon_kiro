@@ -1,0 +1,398 @@
+/* Story layer: chapter bar, journey, in-world paths, transitions, diegetic notes. */
+.story {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* above the vignette (40) and grain (41) so narration stays crisp */
+  z-index: 45;
+  box-sizing: border-box;
+  padding: 0.5rem 0.75rem calc(0.5rem + env(safe-area-inset-bottom, 0px));
+  color: #efe6f7;
+  background: linear-gradient(to top, rgba(8, 4, 16, 0.96), rgba(8, 4, 16, 0.84));
+  border-top: 1px solid #4a3470;
+}
+.story__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.25rem 1rem;
+}
+.story__chapter {
+  margin: 0;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #ffc857;
+}
+.story__journey {
+  display: flex;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.story__stop {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 0.6rem;
+  color: #efe6f7;
+  background: #1c1230;
+  border: 1px solid #4a3470;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.85rem;
+}
+.story__stop[aria-current='step'] {
+  background: var(--pumpkin);
+  border-color: var(--pumpkin);
+  color: #120a08;
+}
+.story__stop[aria-disabled='true'] {
+  color: #b9aacb;
+  border-style: dashed;
+  cursor: not-allowed;
+}
+.story__stop--done:not([aria-current='step']) {
+  border-color: #8fbf7a;
+}
+.story__stop-title {
+  display: none;
+}
+.story__line {
+  margin: 0.35rem 0 0.25rem;
+  min-height: 2.6em;
+  font-size: 1.02rem;
+  line-height: 1.35;
+  font-style: italic;
+}
+.story__foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem 1rem;
+}
+.story__objective {
+  margin: 0;
+  flex: 1 1 16rem;
+  color: #d9cde8;
+  font-size: 0.95rem;
+}
+.story__continue {
+  min-height: 44px;
+  padding: 0 1.1rem;
+  font: inherit;
+  color: #efe6f7;
+  background: #1c1230;
+  border: 1px solid #6a5090;
+  cursor: pointer;
+}
+.story__continue[data-ready='true'] {
+  color: #120a08;
+  background: var(--pumpkin);
+  border-color: var(--candle);
+  font-weight: bold;
+  box-shadow: 0 0 14px rgba(255, 140, 40, 0.55);
+}
+.story button:focus-visible,
+.story__sign:focus-visible,
+.gate__latch:focus-visible,
+.archive button:focus-visible {
+  outline: 3px solid var(--candle, #ffd36b);
+  outline-offset: 2px;
+}
+
+/* In-world paths: wooden signs */
+.story__paths {
+  position: fixed;
+  top: 8.6rem;
+  left: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  z-index: 42;
+}
+.story__paths[hidden] {
+  display: none;
+}
+.story__sign {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0 0.9rem 0 0.7rem;
+  font: inherit;
+  text-align: left;
+  color: #f3e1bd;
+  background: linear-gradient(180deg, #4a2f1a, #34200f);
+  border: 1px solid #6e4a28;
+  clip-path: polygon(0 0, 92% 0, 100% 50%, 92% 100%, 0 100%);
+  cursor: pointer;
+}
+.story__sign[aria-current='location'] {
+  color: #1c0f06;
+  background: linear-gradient(180deg, #e0b074, #c48a4c);
+}
+
+/* Chapter transition */
+.story__veil {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.45s ease;
+  z-index: 60;
+}
+.story__veil--on {
+  opacity: 1;
+}
+:root[data-reduced-motion='true'] .story__veil,
+:root[data-safe-mode='true'] .story__veil {
+  transition: none;
+}
+
+/* Gate */
+.gate {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+}
+.gate__svg {
+  position: absolute;
+  left: 50%;
+  bottom: calc(var(--story-h, 7rem));
+  transform: translateX(-50%);
+  width: min(94vw, 560px, calc((100vh - var(--story-h, 7rem) - 15rem) * 1.333));
+  height: auto;
+}
+.gate__leaf {
+  transition: transform 1s ease;
+}
+.gate__leaf--l {
+  transform-origin: 70px 180px;
+}
+.gate__leaf--r {
+  transform-origin: 330px 180px;
+}
+.gate[data-open='true'] .gate__leaf--l {
+  transform: scaleX(0.18);
+}
+.gate[data-open='true'] .gate__leaf--r {
+  transform: scaleX(0.18);
+}
+.gate[data-open='true'] .gate__chain {
+  opacity: 0;
+}
+.gate__note,
+.gate__latch {
+  z-index: 5;
+}
+.gate__note {
+  position: fixed;
+  top: 9.5rem;
+  left: 0.75rem;
+  max-width: min(26rem, 90vw);
+  margin: 0;
+  padding: 0.6rem 0.8rem;
+  color: #2a1c0a;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-size: 0.95rem;
+  background: #e2cf9c;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+  transform: rotate(-1.2deg);
+}
+.gate__latch {
+  position: fixed;
+  left: 50%;
+  bottom: calc(var(--story-h, 7rem) + 3.5rem);
+  transform: translateX(-50%);
+  min-height: 44px;
+  padding: 0 1rem;
+  font: inherit;
+  color: #efe6f7;
+  background: var(--purple);
+  border: 1px solid var(--pumpkin);
+  cursor: pointer;
+}
+:root[data-reduced-motion='true'] .gate__leaf,
+:root[data-safe-mode='true'] .gate__leaf {
+  transition: none;
+}
+
+/* Diegetic notes */
+.scene-hint,
+.attic__letter {
+  position: fixed;
+  top: 6.2rem;
+  right: 0.75rem;
+  max-width: min(22rem, 90vw);
+  margin: 0;
+  padding: 0.5rem 0.7rem;
+  font-size: 0.9rem;
+  z-index: 20;
+}
+.scene-hint {
+  top: 5.2rem;
+  left: 0.75rem;
+  right: auto;
+  color: #d9cde8;
+  padding-left: 0;
+}
+.attic__letter {
+  color: #2a1c0a;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  background: #d9c58e;
+  transform: rotate(1deg);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+}
+
+/* Archive */
+.scene-archive {
+  position: fixed;
+  inset: 0;
+  overflow-y: auto;
+  box-sizing: border-box;
+  padding: 5.5rem 0.75rem calc(var(--story-h, 7rem) + 1rem);
+  z-index: 5;
+}
+.archive {
+  width: min(94vw, 720px);
+  margin: 0 auto;
+}
+.archive__ledger {
+  margin: 0 0 0.6rem;
+  color: #d9cde8;
+  font-style: italic;
+  font-size: 0.9rem;
+}
+.archive__tabs {
+  display: flex;
+  gap: 0.25rem;
+}
+.archive__tabs [role='tab'] {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0 1rem;
+  font: inherit;
+  color: #efe6f7;
+  background: #1c1230;
+  border: 1px solid #6a5090;
+  border-bottom: 0;
+  cursor: pointer;
+}
+.archive__tabs [role='tab'][aria-selected='true'] {
+  color: #120a08;
+  background: var(--pumpkin);
+}
+.archive__panel[hidden] {
+  display: none;
+}
+.archive__panel .grimoire,
+.archive__panel .gazette {
+  width: 100%;
+  box-sizing: border-box;
+}
+.archive__epilogue {
+  margin-top: 1rem;
+  padding: 0.8rem 1rem;
+  color: #efe6f7;
+  background: rgba(10, 6, 20, 0.88);
+  border: 1px solid #3a2a5a;
+}
+.archive__epilogue h2 {
+  margin: 0 0 0.3rem;
+  font-size: 1.1rem;
+  color: #ffc857;
+}
+.archive__epilogue p {
+  margin: 0 0 0.6rem;
+}
+.archive__book {
+  min-height: 44px;
+  padding: 0 1rem;
+  font: inherit;
+  color: #efe6f7;
+  background: var(--purple);
+  border: 1px solid var(--pumpkin);
+  cursor: pointer;
+}
+
+@media (min-width: 720px) {
+  .story__stop-title {
+    display: inline;
+  }
+}
+@media (max-width: 719px) {
+  .story__line {
+    font-size: 0.92rem;
+  }
+  .gate__note {
+    top: 8.4rem;
+    right: 0.75rem;
+    font-size: 0.85rem;
+  }
+}
+
+/* The title sits at the top as a header; it shrinks once the story leaves the gate. */
+main {
+  position: fixed;
+  top: 0.4rem;
+  left: 4.5rem;
+  right: 4.5rem;
+  z-index: 4;
+  pointer-events: none;
+}
+main h1 {
+  font-size: clamp(2rem, 7vw, 4.2rem);
+  margin: 0;
+  line-height: 1.15;
+}
+main .tagline {
+  margin: 0;
+}
+:root[data-chapter]:not([data-chapter='gate']) main h1 {
+  font-size: clamp(1.2rem, 3vw, 1.6rem);
+  opacity: 0.75;
+}
+:root[data-chapter]:not([data-chapter='gate']) main .tagline {
+  display: none;
+}
+
+.story__tools {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.story .book-btn {
+  position: static;
+}
+.story__tools a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 0.4rem;
+  color: var(--candle);
+  font-size: 0.85rem;
+}
+.scene-hint,
+.attic__letter,
+.gate__note,
+.story {
+  text-align: left;
+}
+@media (max-width: 719px) {
+  :root[data-chapter='gate'] main {
+    top: 3.4rem;
+    left: 0.5rem;
+    right: 0.5rem;
+  }
+  :root[data-chapter]:not([data-chapter='gate']) main {
+    right: 7rem;
+    left: 0.75rem;
+    text-align: left;
+  }
+  .story__foot {
+    gap: 0.3rem 0.5rem;
+  }
+}

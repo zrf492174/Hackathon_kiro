@@ -12,13 +12,14 @@ import {
 import { showWarningModal } from './ui/warningModal';
 import { mountSettingsPanel } from './ui/settingsPanel';
 import { loadAssets } from './core/assets';
-import { mountSceneNav } from './scenes';
+import { mountStory } from './story/ui';
 import { easterEggs, touch } from './interactions';
 import { createBrowserCollection } from './core/collection';
 import { mountCollectionBook } from './ui/collectionBook';
 import './styles/interactions.css';
 import './styles/grimoire.css';
 import './styles/v4.css';
+import './styles/story.css';
 
 const settings = createBrowserSettings();
 const audio = new AudioManager({ scaresAllowed: () => scaresActive(settings.get()) });
@@ -83,5 +84,15 @@ void loadAssets(import.meta.env.BASE_URL).then((assets) => {
   mountCollectionBook(document.body, collection, () => assets.records());
   touch.init(ctx);
   easterEggs.init(ctx);
-  mountSceneNav(app, ctx);
+  mountStory(
+    app,
+    ctx,
+    (() => {
+      try {
+        return window.localStorage;
+      } catch {
+        return null;
+      }
+    })(),
+  );
 });

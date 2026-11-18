@@ -1,43 +1,63 @@
 import type { InteractionContext } from '../interactions';
+import type { ChapterId } from '../story/chapters';
 import { enterGate, leaveGate } from './gate';
 import { attic } from './attic';
+import { archive } from './archive';
 import { graveyard } from './graveyard';
 import { pumpkinPatch } from './pumpkinPatch';
 import { foggyTown } from './fogTown';
-import { castle, gazetteScene, lab, library } from './gothic';
-import { GOTO_EVENT } from '../interactions/castleDoor';
+import { castle, lab } from './gothic';
 
+/** A place a visitor can stand. Several areas make up one story chapter. */
 export type SceneId =
-  'gate' | 'patch' | 'graveyard' | 'fog' | 'attic' | 'castle' | 'lab' | 'library' | 'gazette';
+  | 'gate'
+  | 'patch'
+  | 'graveyard'
+  | 'fog'
+  | 'attic'
+  | 'castle'
+  | 'lab'
+  | 'library'
+  | 'gazette'
+  | 'archive';
 
-export const SCENE_GROUPS: { label: string; scenes: { id: SceneId; label: string }[] }[] = [
-  {
-    label: 'Outdoors',
-    scenes: [
-      { id: 'gate', label: 'Gate' },
-      { id: 'patch', label: 'Pumpkin patch' },
-      { id: 'graveyard', label: 'Graveyard' },
-      { id: 'fog', label: 'Foggy Town' },
-    ],
-  },
-  {
-    label: 'Indoors',
-    scenes: [
-      { id: 'attic', label: 'Attic' },
-      { id: 'castle', label: 'Castle' },
-      { id: 'lab', label: 'Laboratory' },
-      { id: 'library', label: 'Library' },
-      { id: 'gazette', label: 'Gazette' },
-    ],
-  },
-];
+export interface Area {
+  id: SceneId;
+  label: string;
+}
 
-export const SCENES: { id: SceneId; label: string }[] = SCENE_GROUPS.flatMap((g) => g.scenes);
+/** Areas inside each chapter. The first is where the chapter opens. */
+export const CHAPTER_AREAS: Record<ChapterId, Area[]> = {
+  gate: [{ id: 'gate', label: 'The gate' }],
+  grounds: [
+    { id: 'patch', label: 'Pumpkin patch' },
+    { id: 'graveyard', label: 'Churchyard' },
+    { id: 'fog', label: 'Foggy street' },
+  ],
+  attic: [{ id: 'attic', label: 'The attic' }],
+  castle: [
+    { id: 'castle', label: 'Castle hall' },
+    { id: 'lab', label: 'Laboratory' },
+  ],
+  archive: [{ id: 'archive', label: 'The archive' }],
+};
 
-/** Resolve an unknown value (e.g. from a URL hash) to a valid scene id, defaulting to the gate. */
+export const SCENES: Area[] = Object.values(CHAPTER_AREAS).flat();
+
+/** Chapter that holds an area, for deep links and the goto event. */
+export function chapterOfArea(id: SceneId): ChapterId {
+  for (const [chapter, areas] of Object.entries(CHAPTER_AREAS)) {
+    if (areas.some((a) => a.id === id)) return chapter as ChapterId;
+  }
+  return 'gate';
+}
+
+const KNOWN: SceneId[] = [...SCENES.map((s) => s.id), 'library', 'gazette'];
+
+/** Resolve an unknown value (e.g. from a URL hash) to a valid area id, defaulting to the gate. */
 export function parseSceneId(raw: string | null | undefined): SceneId {
   const id = (raw ?? '').replace(/^#/, '');
-  return SCENES.some((s) => s.id === id) ? (id as SceneId) : 'gate';
+  return KNOWN.includes(id as SceneId) ? (id as SceneId) : 'gate';
 }
 
 const enters: Record<SceneId, (ctx: InteractionContext) => void> = {
@@ -47,10 +67,16 @@ const enters: Record<SceneId, (ctx: InteractionContext) => void> = {
   patch: (c) => pumpkinPatch.enter(c),
   castle: (c) => castle.enter(c),
   lab: (c) => lab.enter(c),
-  library: (c) => library.enter(c),
-  gazette: (c) => gazetteScene.enter(c),
+  archive: (c) => archive.enter(c),
+  library: (c) => archive.enter(c),
+  gazette: (c) => archive.enter(c),
   fog: (c) => foggyTown.enter(c),
 };
+
+export function enterArea(id: SceneId, ctx: InteractionContext): void {
+  leaveAll();
+  enters[id](ctx);
+}
 
 export function leaveAll(): void {
   leaveGate();
@@ -59,44 +85,6 @@ export function leaveAll(): void {
   pumpkinPatch.leave();
   castle.leave();
   lab.leave();
-  library.leave();
-  gazetteScene.leave();
+  archive.leave();
   foggyTown.leave();
-}
-
-/** Mounts a compact, grouped (Outdoors / Indoors) keyboard accessible scene nav and switches scenes, destroying the previous one. */
-export function mountSceneNav(host: HTMLElement, ctx: InteractionContext): void {
-  const nav = document.createElement('nav');
-  nav.className = 'scene-nav';
-  nav.setAttribute('aria-label', 'Scenes');
-  const buttons = new Map<SceneId, HTMLButtonElement>();
-  const go = (id: SceneId) => {
-    leaveAll();
-    enters[id](ctx);
-    for (const [k, b] of buttons) b.setAttribute('aria-current', k === id ? 'page' : 'false');
-    ctx.announce(`Entered ${SCENES.find((s) => s.id === id)?.label ?? id}.`);
-  };
-  for (const g of SCENE_GROUPS) {
-    const group = document.createElement('div');
-    group.className = 'scene-nav__group';
-    group.setAttribute('role', 'group');
-    group.setAttribute('aria-label', g.label);
-    const title = document.createElement('span');
-    title.className = 'scene-nav__title';
-    title.setAttribute('aria-hidden', 'true');
-    title.textContent = g.label;
-    group.appendChild(title);
-    for (const s of g.scenes) {
-      const b = document.createElement('button');
-      b.type = 'button';
-      b.textContent = s.label;
-      b.addEventListener('click', () => go(s.id));
-      buttons.set(s.id, b);
-      group.appendChild(b);
-    }
-    nav.appendChild(group);
-  }
-  window.addEventListener(GOTO_EVENT, (e) => go(parseSceneId(String((e as CustomEvent).detail))));
-  host.appendChild(nav);
-  go('gate');
 }

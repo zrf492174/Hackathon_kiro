@@ -1,5 +1,4 @@
 import { bats, lightning } from '../interactions';
-import { gazettePanel, grimoirePanel } from '../interactions/panels';
 import { labLever } from '../interactions/labLever';
 import { castleDoor } from '../interactions/castleDoor';
 import { createFigures } from '../interactions/figures';
@@ -26,7 +25,7 @@ const castleSvg = `<svg class="castle__svg" viewBox="0 0 400 260" role="img" ari
   <path d="M185 200 L185 170 Q205 150 225 170 L225 200 Z" fill="#050308"/>
 </svg>`;
 
-/** Haunted castle on the hill. The door leads to the library. */
+/** Haunted castle on the hill. A stair inside leads down to the laboratory. */
 export const castle = createScene(
   'scene-castle',
   'The haunted castle',
@@ -41,7 +40,3 @@ export const lab = createScene(
   [lightning, labLever, labControls, labMonster],
   `<p class="scene-title">The Laboratory</p><div class="lab">${LAB_SVG}</div>`,
 );
-
-export const library = createScene('scene-library', 'The library of grimoires', [grimoirePanel]);
-
-export const gazetteScene = createScene('scene-gazette', 'The haunted gazette', [gazettePanel]);

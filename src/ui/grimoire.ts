@@ -1,3 +1,4 @@
+import { signal } from '../story/events';
 import {
   clampPage,
   doiUrl,
@@ -102,6 +103,7 @@ export async function mountGrimoire(
     if (to === page) return;
     page = to;
     show(true);
+    signal('page-turned');
   };
   prev.addEventListener('click', () => turn(-1));
   next.addEventListener('click', () => turn(1));
@@ -112,7 +114,7 @@ export async function mountGrimoire(
   });
   keyHandler = (e) => {
     const t = e.target as HTMLElement | null;
-    if (t && t.closest('select, input, textarea')) return;
+    if (t && t.closest('select, input, textarea, [role="tab"]')) return;
     if (e.key === 'ArrowLeft') turn(-1);
     else if (e.key === 'ArrowRight') turn(1);
   };

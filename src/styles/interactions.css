@@ -11,9 +11,9 @@
 }
 .site-footer {
   position: fixed;
-  bottom: 0.5rem;
-  width: 100%;
-  text-align: center;
+  bottom: calc(var(--story-h, 7rem) + 0.25rem);
+  left: 0.5rem;
+  text-align: left;
   z-index: 20;
 }
 .site-footer a {
@@ -89,7 +89,7 @@
 
 .pumpkin-row {
   position: fixed;
-  bottom: 4rem;
+  bottom: calc(var(--story-h, 7rem) + 0.75rem);
   left: 0;
   right: 0;
   display: flex;
@@ -133,7 +133,7 @@
 
 .hidden-door {
   position: fixed;
-  bottom: 9rem;
+  bottom: calc(var(--story-h, 7rem) + 6rem);
   right: 10%;
   width: 72px;
   height: 110px;
@@ -222,16 +222,6 @@
 }
 
 /* ---- v2: scenes, navigation, collection, extended interactions ---- */
-.scene-nav {
-  position: fixed;
-  bottom: 0.75rem;
-  left: 0.75rem;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-  z-index: 30;
-}
-.scene-nav button,
 .book-btn,
 .book-close,
 .candle-btn {
@@ -243,13 +233,9 @@
   border: 1px solid var(--pumpkin);
   cursor: pointer;
 }
-.scene-nav button[aria-current='page'] {
-  background: var(--pumpkin);
-  color: var(--bg);
-}
 .book-btn {
   position: fixed;
-  bottom: 3.5rem;
+  bottom: calc(var(--story-h, 7rem) + 0.5rem);
   right: 0.75rem;
   z-index: 30;
 }
@@ -287,7 +273,7 @@ html::after {
 
 .candle-row {
   position: fixed;
-  bottom: 4rem;
+  bottom: calc(var(--story-h, 7rem) + 0.75rem);
   left: 50%;
   transform: translateX(-50%);
   display: flex;

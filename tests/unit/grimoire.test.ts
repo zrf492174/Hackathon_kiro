@@ -112,10 +112,11 @@ describe('rendering', () => {
 
 describe('scene ids', () => {
   it('parses the new scenes', () => {
-    for (const id of ['castle', 'lab', 'library', 'gazette']) {
+    for (const id of ['castle', 'lab', 'archive']) {
       expect(parseSceneId(`#${id}`)).toBe(id);
       expect(SCENES.some((s) => s.id === id)).toBe(true);
     }
+    expect(parseSceneId('#library')).toBe('library');
     expect(parseSceneId('nope')).toBe('gate');
   });
 });
