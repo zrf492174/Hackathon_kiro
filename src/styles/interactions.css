@@ -1,6 +1,6 @@
 .gate-stage {
+  /* Not a stacking context, so the fog and light layers can sit between backdrops (z 0) and controls. */
   position: relative;
-  z-index: 3;
 }
 .score {
   position: fixed;

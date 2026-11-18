@@ -272,3 +272,16 @@ test('reduced motion keeps new scenes static', async ({ page }) => {
     'none',
   );
 });
+
+test('reduced motion keeps grain, light flicker and parallax still', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await enter(page, 'attic');
+  const anim = (sel: string) =>
+    page.locator(sel).evaluate((e) => getComputedStyle(e).animationName);
+  expect(await anim('.grain')).toBe('none');
+  expect(await anim('.light__pool')).toBe('none');
+  await page.mouse.move(10, 10);
+  await page.mouse.move(600, 400);
+  expect(await page.locator('#fog').evaluate((e) => getComputedStyle(e).transform)).toBe('none');
+  await expect(page.locator('.loft__svg')).toBeVisible();
+});

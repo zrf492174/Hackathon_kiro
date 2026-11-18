@@ -20,6 +20,7 @@ import './styles/interactions.css';
 import './styles/grimoire.css';
 import './styles/v4.css';
 import './styles/story.css';
+import './styles/atmosphere.css';
 
 const settings = createBrowserSettings();
 const audio = new AudioManager({ scaresAllowed: () => scaresActive(settings.get()) });
@@ -39,6 +40,7 @@ app.innerHTML = `
   </main>
   <footer class="site-footer"><a href="https://github.com/zrf492174/Hackathon_kiro/blob/main/CREDITS.md" rel="noopener">Credits and licenses</a></footer>
   <canvas id="fog" class="fx" aria-hidden="true"></canvas>
+  <div class="fx light" aria-hidden="true"><div class="light__pool"></div></div>
   <div class="fx vignette" aria-hidden="true"></div>
   <div class="fx grain" aria-hidden="true"></div>
   <div class="candle" aria-hidden="true"></div>`;
@@ -55,11 +57,27 @@ settings.subscribe((s) => {
 
 audio.bindVisibility();
 
+// Gentle pointer parallax for the fog and light layers. Off when motion is reduced or in safe mode.
+let parallaxFrame = 0;
+window.addEventListener(
+  'pointermove',
+  (e) => {
+    if (parallaxFrame || effectiveReducedMotion(settings.get(), osPrefersReducedMotion())) return;
+    if (settings.get().safeMode) return;
+    parallaxFrame = requestAnimationFrame(() => {
+      parallaxFrame = 0;
+      root.style.setProperty('--px', ((e.clientX / window.innerWidth) * 2 - 1).toFixed(3));
+      root.style.setProperty('--py', ((e.clientY / window.innerHeight) * 2 - 1).toFixed(3));
+    });
+  },
+  { passive: true },
+);
+
 void showWarningModal(document.body).then(async ({ sound }) => {
   if (!sound) settings.set({ muted: true });
   if (await audio.start()) {
     audio.setMuted(settings.get().muted);
-    audio.play('wind');
+    audio.setAmbience(root.dataset.chapter ?? 'gate');
   }
 });
 

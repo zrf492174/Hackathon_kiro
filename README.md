@@ -50,7 +50,7 @@ Hosted on GitHub Pages with Vite `base` set to `/Hackathon_kiro/`.
 
 ## Gothic scenes: castle, laboratory, library, gazette
 
-- **Castle**: SVG castle on a hill with slow window flicker (under 3 flashes per second, static in safe mode and reduced motion). The drawbridge button leads to the library.
+- **Castle**: SVG castle on a hill with slow window flicker (under 3 flashes per second, static in safe mode and reduced motion). A stair inside leads down to the laboratory (same chapter).
 - **Laboratory**: Frankenstein style lab with a Tesla coil and a stitched monster. The lever is a toggle button (`aria-pressed`); animation is static in safe mode and reduced motion.
 - **Library**: `public/data/grimoire.json` shown as an ancient spellbook, one paper per page. Use the buttons or ArrowLeft/ArrowRight to turn pages, and the chapter filter to pick a topic. Entries marked `sample` are hand-seeded.
 - **Gazette**: `public/data/gazette.json` as a haunted newspaper. Only headlines, links and licence/terms text are shown.
@@ -63,9 +63,38 @@ Data is fetched from the site's own `data/` folder (works under the `/Hackathon_
 - **Gazette**: aged, yellowed newspaper with a CSS-only gradient, paper grain, serif masthead, dateline and columns.
 - **Classic horror homages**: original silhouettes (long-fingered stair shadow, caped gentleman, gaunt wanderer, sleepwalker, bandaged wanderer, werewolf) as keyboard-focusable buttons in the gate, attic, graveyard and castle. Motion only when allowed; no flashing.
 - **Laboratory**: stone interior with a stormy window, Tesla coils, gauges, a sheet-covered stitched creature and a hunched assistant; lever, voltage slider and bubbling flasks.
-- **Grouped navigation**: Outdoors and Indoors groups replace the flat button row; the duplicate pumpkin puzzle now lives only in the Pumpkin patch.
+- **Navigation**: replaced in v5 by the story layer described below.
 - **Foggy Town**: dense layered fog with a density slider, a rusty siren, and creatures revealed by Listen / Search buttons or the lantern pointer.
 
 ### Homage credit
 
 Inspired by classic horror cinema, including Silent Hill and The Mist. All artwork is original inline SVG/CSS; no film designs are copied or traced.
+
+## v5 story: one night in five chapters
+
+The scenes are now one linear story instead of separate buttons. A story bar at the bottom shows the chapter, a narration line (typed out, or shown at once with reduced motion or safe mode, and always read by screen readers through a polite live region), the current objective and one continue button.
+
+| Chapter       | Merged scenes                                                                 | Objective                                                     |
+| ------------- | ----------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| 1 The Gate    | gate                                                                          | Lift the latch (a note from the Keeper is nailed to the gate) |
+| 2 The Grounds | pumpkin patch, churchyard, foggy street (wooden signposts move between them)  | Light the five pumpkins in order, which opens the hidden door |
+| 3 The Attic   | attic (rafters, moonlit window, a letter on the trunk)                        | Blow out all three candles                                    |
+| 4 The Castle  | castle hall and laboratory (the stair leads down)                             | Raise the voltage above 70 kV and pull the lever              |
+| 5 The Archive | grimoire and gazette in one tablist, with the Keeper's ledger and an epilogue | Turn a page; the epilogue opens the collection book           |
+
+- Nobody gets stuck: before the objective is met the button reads "Press on anyway"; afterwards it is highlighted with a narrative label. No timed or precision actions gate progress.
+- The journey list (`aria-current="step"`) lets visitors revisit reached chapters; locked ones are `aria-disabled`. Progress is kept in `localStorage` under `hollow:story`.
+- Deep links still work: `#gate`, `#grounds`, `#attic`, `#castle`, `#archive`, and the old ids `#patch`, `#graveyard`, `#fog`, `#lab`, `#library`, `#gazette` open the chapter that now contains them.
+- Chapter changes fade through black with a synthesized footstep or door sound; the fade is instant under reduced motion.
+- Code: `src/story/` (chapters, pure state, objective events, story bar UI), `src/scenes/archive.ts`, `src/styles/story.css`.
+
+### Atmosphere techniques
+
+- **Fog**: `src/core/fog.ts` renders three bands of fractal value noise at 96x54 pixels, scaled up with smoothing. Far bands are fine and slow and near bands are coarse and fast, so the fog has parallax. It is densest near the ground and tinted per chapter. It runs at about 20 frames per second, pauses when the tab is hidden, and draws one still frame under reduced motion.
+- **Light**: a blend layer adds cool moonlight from the upper right and warm lamp, pumpkin and candle pools per chapter, which breathe slowly with no flashing. The vignette and slowed film grain (about 2 changes per second, well under 3 Hz) complete the effect. Gentle pointer parallax is turned off with reduced motion or safe mode.
+- **Materials**: inline SVG `feTurbulence` textures cover stone (gate pillars, lit with `feDiffuseLighting`), paper (notes and letters) and wood (signposts, attic floor). Soft contact shadows sit under pumpkins, candles, stones, the trunk and the gate, and far layers are slightly blurred for depth of field.
+- **Sound**: `AudioManager.setAmbience(chapter)` crossfades synthesized beds: filtered noise wind with gusts, rain in the castle, and a low detuned drone. Occasional distant sounds play (owl, bell, creaking timber, thunder), plus a lab hum that rises with the voltage. The heartbeat counts as a scare, so it only plays when scares are enabled. Everything starts only after the entry gesture, respects mute and pauses when hidden.
+
+### Licensing stance
+
+Every visual and sound in v5 is original: inline SVG, CSS, canvas and Web Audio synthesis, written for this project. No photos, recordings, fonts or designs from films or games were added, and no trademarked names appear in the visible UI. If real photos or recordings are added later, use only CC0 or self-made files and record each one in `public/assets/manifest.json`, then run `npm run assets:credits` so `CREDITS.md` stays complete (see `.kiro/steering/assets-policy.md`).

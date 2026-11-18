@@ -99,7 +99,7 @@
 .yard {
   position: fixed;
   inset: 0;
-  z-index: -1;
+  z-index: 0;
 }
 .yard__svg {
   width: 100%;
@@ -350,7 +350,7 @@
 .town {
   position: fixed;
   inset: 0;
-  z-index: -1;
+  z-index: 0;
   overflow: hidden;
 }
 .town__svg {
@@ -584,6 +584,7 @@
   overflow-y: auto;
   box-sizing: border-box;
   padding-bottom: calc(var(--story-h, 7rem) + 6rem);
+  z-index: 3;
 }
 .figure--werewolf svg {
   filter: drop-shadow(0 0 3px #b9a7e0) drop-shadow(0 0 8px rgba(185, 167, 224, 0.6));

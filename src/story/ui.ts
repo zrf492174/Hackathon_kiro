@@ -1,6 +1,7 @@
 import { effectiveReducedMotion } from '../a11y/reducedMotion';
 import type { InteractionContext } from '../interactions';
 import { GOTO_EVENT } from '../interactions/castleDoor';
+import { transitionSound } from '../core/audio';
 import { CHAPTER_AREAS, chapterOfArea, enterArea, leaveAll, parseSceneId } from '../scenes';
 import type { SceneId } from '../scenes';
 import { CHAPTERS, chapterIndex } from './chapters';
@@ -183,6 +184,7 @@ export function mountStory(
       renderBar();
       syncHeight();
       mark();
+      ctx.audio.setAmbience(target.id);
       say(`${target.title}. ${target.intro}`);
     };
     if (still()) {
@@ -191,7 +193,7 @@ export function mountStory(
     }
     busy = true;
     veil.classList.add('story__veil--on');
-    ctx.audio.play('creak');
+    ctx.audio.play(transitionSound(target.id));
     veilTimer = window.setTimeout(() => {
       swap();
       veil.classList.remove('story__veil--on');
@@ -240,6 +242,7 @@ export function mountStory(
   );
   renderBar();
   syncHeight();
+  ctx.audio.setAmbience(CHAPTERS[state.current].id);
   say(`${CHAPTERS[state.current].title}. ${CHAPTERS[state.current].intro}`);
 
   return () => {

@@ -1,8 +1,10 @@
+import { humLevel } from '../core/audio';
 import { arcIntensity, figureMotionAllowed } from './gating';
 import { FLASKS } from '../scenes/labArt';
 import type { Interaction } from './types';
 
 let box: HTMLElement | null = null;
+let hum: (() => void) | null = null;
 
 /** Voltage slider and bubbling flasks. The arc reads --arc from the stage (0 when the lever is off). */
 export const labControls: Interaction = {
@@ -27,6 +29,7 @@ export const labControls: Interaction = {
       const live = ctx.root.classList.contains('lab--live');
       ctx.root.style.setProperty('--arc', String(arcIntensity(input.value, live)));
       out.textContent = `${input.value} kV`;
+      ctx.audio.setHum(humLevel(input.value, live));
     };
     input.addEventListener('input', () => {
       apply();
@@ -52,8 +55,11 @@ export const labControls: Interaction = {
     ctx.root.appendChild(el);
     ctx.root.style.setProperty('--arc', '0');
     box = el;
+    hum = () => ctx.audio.setHum(0);
   },
   destroy() {
+    hum?.();
+    hum = null;
     box?.remove();
     box = null;
   },

@@ -59,7 +59,18 @@ export interface AudioContextLike {
   };
 }
 
-export type SoundName = 'wind' | 'creak' | 'whisper' | 'thunder' | 'boo' | 'chime';
+export type SoundName =
+  | 'wind'
+  | 'creak'
+  | 'whisper'
+  | 'thunder'
+  | 'boo'
+  | 'chime'
+  | 'owl'
+  | 'bell'
+  | 'timber'
+  | 'footsteps'
+  | 'latch';
 
 const SOUND_GROUP: Record<SoundName, AudioGroup> = {
   wind: 'ambient',
@@ -67,8 +78,62 @@ const SOUND_GROUP: Record<SoundName, AudioGroup> = {
   whisper: 'sfx',
   thunder: 'sfx',
   chime: 'sfx',
+  owl: 'ambient',
+  bell: 'ambient',
+  timber: 'ambient',
+  footsteps: 'sfx',
+  latch: 'sfx',
   boo: 'scare',
 };
+
+/** Level of each continuous ambience bed (0 to 1) and the occasional sounds heard in a chapter. */
+export interface AmbienceMix {
+  wind: number;
+  rain: number;
+  drone: number;
+  heartbeat: boolean;
+  events: SoundName[];
+}
+
+const SILENT: AmbienceMix = { wind: 0, rain: 0, drone: 0, heartbeat: false, events: [] };
+
+export const AMBIENCE: Readonly<Record<string, AmbienceMix>> = {
+  gate: { wind: 0.7, rain: 0, drone: 0.15, heartbeat: false, events: ['owl', 'bell'] },
+  grounds: {
+    wind: 0.55,
+    rain: 0,
+    drone: 0.25,
+    heartbeat: false,
+    events: ['owl', 'bell', 'timber'],
+  },
+  attic: { wind: 0.25, rain: 0, drone: 0.35, heartbeat: true, events: ['timber', 'whisper'] },
+  castle: { wind: 0.35, rain: 0.6, drone: 0.45, heartbeat: true, events: ['thunder', 'timber'] },
+  archive: { wind: 0.15, rain: 0.2, drone: 0.15, heartbeat: false, events: ['timber'] },
+};
+
+/** Ambience for a chapter. The heartbeat is a scare effect, so it only plays when scares are allowed. */
+export function ambienceMix(
+  chapter: string | null | undefined,
+  scaresAllowed: boolean,
+): AmbienceMix {
+  const base = (chapter && AMBIENCE[chapter]) || SILENT;
+  return { ...base, events: [...base.events], heartbeat: base.heartbeat && scaresAllowed };
+}
+
+/** Sound that carries the visitor between chapters. */
+export function transitionSound(to: string): SoundName {
+  return to === 'attic' || to === 'castle' ? 'creak' : 'footsteps';
+}
+
+/** Gain for the lab's electric hum at a voltage (0 to 100 kV) when the lever is on. */
+export function humLevel(voltage: unknown, live: boolean): number {
+  if (!live) return 0;
+  const n = typeof voltage === 'number' ? voltage : Number.parseFloat(String(voltage));
+  return Number.isFinite(n) ? Math.min(1, Math.max(0, n / 100)) : 0;
+}
+
+const BED_GAIN = { wind: 0.5, rain: 0.25, drone: 0.12, hum: 0.09 };
+const TICK_MS = 2000;
 
 export interface AudioOptions {
   createContext?: () => AudioContextLike;
@@ -92,6 +157,11 @@ export class AudioManager {
   private muted = false;
   private hidden = false;
   private ambientStop: (() => void) | null = null;
+  private chapter: string | null = null;
+  private beds: Record<'wind' | 'rain' | 'drone' | 'hum', GainLike> | null = null;
+  private bedStop: (() => void)[] = [];
+  private tick: ReturnType<typeof setInterval> | null = null;
+  private hum = 0;
   private readonly createContext: () => AudioContextLike;
   private readonly scaresAllowed: () => boolean;
 
@@ -131,7 +201,24 @@ export class AudioManager {
       }
     }
     if (!this.hidden && this.ctx.state === 'suspended') await this.ctx.resume();
+    if (this.chapter) this.applyAmbience();
     return true;
+  }
+
+  /** Crossfade to a chapter's ambience. Before start() it is remembered and applied on start. */
+  setAmbience(chapter: string): void {
+    this.chapter = chapter;
+    if (this.ctx) this.applyAmbience();
+  }
+
+  get ambience(): string | null {
+    return this.chapter;
+  }
+
+  /** Lab hum, 0 to 1. Rises with the voltage while the lever is on. */
+  setHum(level: number): void {
+    this.hum = Math.min(1, Math.max(0, Number.isFinite(level) ? level : 0));
+    if (this.beds && this.ctx) this.ramp(this.beds.hum, this.hum * BED_GAIN.hum, 0.4);
   }
 
   setMuted(muted: boolean): void {
@@ -198,6 +285,26 @@ export class AudioManager {
       case 'boo':
         this.tone(out, 'triangle', 220, 110, 0.6, 0.25);
         break;
+      case 'owl':
+        // Two soft hoots, the second lower.
+        this.tone(out, 'sine', 420, 380, 0.45, 0.05);
+        this.tone(out, 'sine', 380, 330, 0.7, 0.05, 0.6);
+        break;
+      case 'bell':
+        // A distant bell: a low partial and a quieter inharmonic one, long decay.
+        this.tone(out, 'sine', 196, 196, 3.5, 0.04);
+        this.tone(out, 'sine', 466, 466, 2.5, 0.015);
+        break;
+      case 'timber':
+        this.tone(out, 'sawtooth', 70, 48, 1.4, 0.035);
+        break;
+      case 'footsteps':
+        for (let i = 0; i < 4; i++) this.noiseBurst(out, 900, 0.16, 0.12, i * 0.42);
+        break;
+      case 'latch':
+        this.noiseBurst(out, 3000, 0.08, 0.2);
+        this.tone(out, 'square', 140, 90, 0.18, 0.05, 0.05);
+        break;
     }
     return true;
   }
@@ -205,6 +312,108 @@ export class AudioManager {
   stopAmbient(): void {
     this.ambientStop?.();
     this.ambientStop = null;
+    if (this.tick) clearInterval(this.tick);
+    this.tick = null;
+    for (const s of this.bedStop) s();
+    this.bedStop = [];
+    this.beds = null;
+  }
+
+  private ramp(g: GainLike, to: number, seconds: number): void {
+    if (!this.ctx) return;
+    const t = this.ctx.currentTime;
+    g.gain.setValueAtTime(g.gain.value, t);
+    g.gain.linearRampToValueAtTime(to, t + seconds);
+  }
+
+  private mix(): AmbienceMix {
+    return ambienceMix(this.chapter, this.scaresAllowed());
+  }
+
+  private applyAmbience(): void {
+    if (!this.ctx) return;
+    const beds = this.ensureBeds();
+    if (!beds) return;
+    const m = this.mix();
+    this.ramp(beds.wind, m.wind * BED_GAIN.wind, 2.5);
+    this.ramp(beds.rain, m.rain * BED_GAIN.rain, 2.5);
+    this.ramp(beds.drone, m.drone * BED_GAIN.drone, 3);
+    this.ramp(beds.hum, this.chapter === 'castle' ? this.hum * BED_GAIN.hum : 0, 1);
+    if (!this.tick) this.tick = setInterval(() => this.onTick(), TICK_MS);
+  }
+
+  /** Wind gusts, distant one-off sounds and the heartbeat. Skipped while the tab is hidden. */
+  private onTick(): void {
+    if (!this.ctx || !this.beds || this.hidden) return;
+    const m = this.mix();
+    this.ramp(this.beds.wind, m.wind * BED_GAIN.wind * (0.55 + Math.random() * 0.9), 1.8);
+    if (m.events.length && Math.random() < 0.14) {
+      this.play(m.events[Math.floor(Math.random() * m.events.length)]);
+    }
+    const scare = this.groups.get('scare');
+    if (m.heartbeat && scare) {
+      const fast = this.chapter === 'castle' ? 0.3 + this.hum * 0.5 : 0;
+      const beats = fast > 0.6 ? 3 : 2;
+      for (let b = 0; b < beats; b++) {
+        const at = b * (TICK_MS / 1000 / beats);
+        this.tone(scare, 'sine', 62, 42, 0.14, 0.12, at);
+        this.tone(scare, 'sine', 55, 38, 0.16, 0.08, at + 0.24);
+      }
+    }
+  }
+
+  private ensureBeds() {
+    if (this.beds) return this.beds;
+    const ctx = this.ctx;
+    const out = this.groups.get('ambient');
+    if (!ctx || !out) return null;
+    const bed = (build: (g: GainLike) => () => void) => {
+      const g = ctx.createGain();
+      g.gain.value = 0;
+      g.connect(out);
+      this.bedStop.push(build(g));
+      return g;
+    };
+    const noise = (g: GainLike, type: string, freq: number, q: number) => {
+      const src = ctx.createBufferSource();
+      src.buffer = this.noiseBuffer(3);
+      src.loop = true;
+      const f = ctx.createBiquadFilter();
+      f.type = type;
+      f.frequency.value = freq;
+      f.Q.value = q;
+      src.connect(f);
+      f.connect(g);
+      src.start();
+      return () => src.stop();
+    };
+    const osc = (g: GainLike, type: string, freq: number) => {
+      const o = ctx.createOscillator();
+      o.type = type;
+      o.frequency.value = freq;
+      const f = ctx.createBiquadFilter();
+      f.type = 'lowpass';
+      f.frequency.value = 220;
+      f.Q.value = 0.7;
+      o.connect(f);
+      f.connect(g);
+      o.start();
+      return () => o.stop();
+    };
+    this.beds = {
+      wind: bed((g) => noise(g, 'lowpass', 380, 0.8)),
+      rain: bed((g) => noise(g, 'highpass', 2200, 0.5)),
+      drone: bed((g) => {
+        const a = osc(g, 'sawtooth', 43.6);
+        const b = osc(g, 'sawtooth', 44.3);
+        return () => {
+          a();
+          b();
+        };
+      }),
+      hum: bed((g) => osc(g, 'sawtooth', 60)),
+    };
+    return this.beds;
   }
 
   dispose(): void {
@@ -248,7 +457,13 @@ export class AudioManager {
     return buf;
   }
 
-  private noiseBurst(out: GainLike, cutoff: number, seconds: number, peak: number): void {
+  private noiseBurst(
+    out: GainLike,
+    cutoff: number,
+    seconds: number,
+    peak: number,
+    delay = 0,
+  ): void {
     const ctx = this.ctx as AudioContextLike;
     const src = ctx.createBufferSource();
     src.buffer = this.noiseBuffer(seconds);
@@ -256,7 +471,7 @@ export class AudioManager {
     filter.type = 'lowpass';
     filter.frequency.value = cutoff;
     const g = ctx.createGain();
-    const t = ctx.currentTime;
+    const t = ctx.currentTime + delay;
     g.gain.setValueAtTime(0, t);
     g.gain.linearRampToValueAtTime(peak, t + seconds * 0.3);
     g.gain.linearRampToValueAtTime(0, t + seconds);
@@ -274,11 +489,12 @@ export class AudioManager {
     to: number,
     seconds: number,
     peak: number,
+    delay = 0,
   ): void {
     const ctx = this.ctx as AudioContextLike;
     const osc = ctx.createOscillator();
     osc.type = type;
-    const t = ctx.currentTime;
+    const t = ctx.currentTime + delay;
     osc.frequency.setValueAtTime(from, t);
     osc.frequency.linearRampToValueAtTime(to, t + seconds);
     const g = ctx.createGain();

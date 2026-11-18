@@ -440,3 +440,9 @@ npm run assets:credits            # 生成 CREDITS.md
 ## v3 grimoire (FEAT-002)
 
 Done: castle, laboratory, library (grimoire) and gazette scenes with unit and Playwright/axe tests.
+
+## v5 故事化与氛围 (task-v5-story)
+
+完成:将 9 个场景串联为 5 章线性故事(大门、庭院、阁楼、城堡、档案馆)。庭院合并南瓜地、墓园和雾镇,城堡合并城堡外景与实验室,档案馆用标签页合并魔法书与报纸,并带尾声。底部故事栏显示章节、旁白、目标和唯一的继续按钮("Press on anyway" 保证不会卡关),进度存于 localStorage `hollow:story`,旧锚点自动映射。
+
+氛围:三层分形噪声雾(低分辨率、视差、贴地更浓、按章节着色)、按章节的月光与暖光光池、慢速胶片颗粒、SVG feTurbulence 石材/纸张/木纹、接触阴影、远景景深、指针视差(减少动态与安全模式下静止);Web Audio 合成的分章节环境声(风与阵风、城堡雨声、低频嗡鸣、猫头鹰、远钟、木梁吱呀、随电压升高的实验室电流声,心跳仅在开启惊吓时播放)。全部为原创素材,无外部文件。

@@ -18,9 +18,12 @@ export function enterGate(ctx: InteractionContext): void {
     <p class="score">Score: <span id="score">0</span></p>
     <div class="gate" data-open="false">
       <svg class="gate__svg" viewBox="0 0 400 300" role="img" aria-label="A tall iron gate between two stone pillars, chained shut">
+        <defs><filter id="gateStone" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="3" seed="3" result="n"/><feDiffuseLighting in="n" lighting-color="#2c2738" surfaceScale="2" result="l"><feDistantLight azimuth="235" elevation="55"/></feDiffuseLighting><feComposite in="l" in2="SourceGraphic" operator="in"/></filter></defs>
         <rect x="0" y="262" width="400" height="38" fill="#0b0910"/>
-        <g fill="#15111d"><rect x="20" y="70" width="46" height="200"/><rect x="334" y="70" width="46" height="200"/>
+        <g fill="#15111d" filter="url(#gateStone)"><rect x="20" y="70" width="46" height="200"/><rect x="334" y="70" width="46" height="200"/>
           <polygon points="14,70 43,40 72,70"/><polygon points="328,70 357,40 386,70"/></g>
+        <path d="M66 72 V268 M380 72 V268 M43 41 L72 70 M357 41 L386 70" stroke="#a9b8e6" stroke-opacity="0.35" stroke-width="1.5" fill="none"/>
+        <ellipse cx="200" cy="270" rx="190" ry="6" fill="#000" opacity="0.6"/>
         <g class="gate__leaf gate__leaf--l" fill="none" stroke="#2a2433" stroke-width="5">
           <path d="M70 268 V90 M95 268 V80 M120 268 V76 M145 268 V80 M170 268 V90 M70 120 H196 M70 230 H196 M70 90 Q133 50 196 90"/>
           <path d="M95 80 l0 -14 M120 76 l0 -16 M145 80 l0 -14" stroke-width="4"/></g>
@@ -53,6 +56,7 @@ export function enterGate(ctx: InteractionContext): void {
     latch.textContent = open ? 'Close the gate' : 'Lift the latch';
     stage?.querySelector('.gate')?.setAttribute('data-open', String(open));
     ctx.announce(open ? 'The gate swings open.' : 'The gate creaks shut.');
+    ctx.audio.play(open ? 'latch' : 'creak');
     if (open) signal('gate-open');
   });
 }
