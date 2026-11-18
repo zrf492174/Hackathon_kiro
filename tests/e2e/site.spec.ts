@@ -196,6 +196,34 @@ test('objectives complete from the real interactions and mark the continue butto
   await expect(cont).toHaveAttribute('data-ready', 'true');
 });
 
+test('blowing out all candles marks the attic ready', async ({ page }) => {
+  await enter(page, 'attic');
+  const cont = page.locator('.story__continue');
+  await expect(cont).toHaveAttribute('data-ready', 'false');
+  for (const n of [1, 2, 3]) {
+    await page.getByRole('button', { name: new RegExp(`^Candle ${n},`) }).click();
+  }
+  await expect(cont).toHaveAttribute('data-ready', 'true');
+});
+
+test('waking the lab creature marks the castle ready', async ({ page }) => {
+  await enter(page, 'lab');
+  const cont = page.locator('.story__continue');
+  await expect(cont).toHaveAttribute('data-ready', 'false');
+  await page.getByRole('button', { name: 'Pull the lever' }).click();
+  await page.getByLabel('Voltage').fill('75');
+  await expect(cont).toHaveAttribute('data-ready', 'true');
+});
+
+test('turning a grimoire page marks the archive ready', async ({ page }) => {
+  await enter(page, 'archive');
+  const cont = page.locator('.story__continue');
+  await expect(cont).toHaveAttribute('data-ready', 'false');
+  await page.getByRole('tab', { name: 'Grimoires' }).click();
+  await page.getByRole('button', { name: 'Next page' }).click();
+  await expect(cont).toHaveAttribute('data-ready', 'true');
+});
+
 test('legacy hashes open the merged chapter', async ({ page }) => {
   await enter(page, 'library');
   await expect(page.locator('.story__chapter')).toContainText('The Archive');

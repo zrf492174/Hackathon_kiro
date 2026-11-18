@@ -73,6 +73,8 @@ export function mountStory(
   const objective = q<HTMLElement>('.story__objective');
   objective.id = 'story-objective';
   const cont = q<HTMLButtonElement>('.story__continue');
+  // The chapter heading is the focus anchor after a chapter swap.
+  chapterEl.tabIndex = -1;
 
   const still = () => {
     const s = ctx.settings.get();
@@ -96,46 +98,59 @@ export function mountStory(
     }, TYPE_MS);
   };
 
-  const renderJourney = () => {
-    journey.innerHTML = '';
-    CHAPTERS.forEach((c, i) => {
-      const li = document.createElement('li');
-      const b = document.createElement('button');
-      b.type = 'button';
-      const locked = !canVisit(state, i);
-      const done = isDone(state, i);
-      b.className = 'story__stop';
-      b.innerHTML = `<span aria-hidden="true">${i + 1}</span><span class="story__stop-title" aria-hidden="true"> ${c.title}</span>`;
-      b.setAttribute(
-        'aria-label',
-        `Chapter ${i + 1}: ${c.title}${done ? ', complete' : ''}${locked ? ', locked' : ''}`,
-      );
-      if (i === state.current) b.setAttribute('aria-current', 'step');
-      if (locked) b.setAttribute('aria-disabled', 'true');
-      if (done) b.classList.add('story__stop--done');
-      b.addEventListener('click', () => {
-        if (!locked && i !== state.current) goChapter(i);
-      });
-      li.appendChild(b);
-      journey.appendChild(li);
-    });
+  /** Rebuilding buttons drops focus; put it back on the equivalent new button. */
+  const keepFocus = (container: HTMLElement, rebuild: () => void) => {
+    const active = document.activeElement;
+    const idx =
+      active && container.contains(active)
+        ? [...container.querySelectorAll('button')].indexOf(active as HTMLButtonElement)
+        : -1;
+    rebuild();
+    if (idx >= 0) container.querySelectorAll('button')[idx]?.focus();
   };
 
-  const renderPaths = () => {
-    const chapter = CHAPTERS[state.current];
-    const areas = CHAPTER_AREAS[chapter.id];
-    paths.hidden = areas.length < 2;
-    paths.innerHTML = '';
-    for (const a of areas) {
-      const b = document.createElement('button');
-      b.type = 'button';
-      b.className = 'story__sign';
-      b.textContent = a.label;
-      if (a.id === area) b.setAttribute('aria-current', 'location');
-      b.addEventListener('click', () => goArea(a.id));
-      paths.appendChild(b);
-    }
-  };
+  const renderJourney = () =>
+    keepFocus(journey, () => {
+      journey.innerHTML = '';
+      CHAPTERS.forEach((c, i) => {
+        const li = document.createElement('li');
+        const b = document.createElement('button');
+        b.type = 'button';
+        const locked = !canVisit(state, i);
+        const done = isDone(state, i);
+        b.className = 'story__stop';
+        b.innerHTML = `<span aria-hidden="true">${i + 1}</span><span class="story__stop-title" aria-hidden="true"> ${c.title}</span>`;
+        b.setAttribute(
+          'aria-label',
+          `Chapter ${i + 1}: ${c.title}${done ? ', complete' : ''}${locked ? ', locked' : ''}`,
+        );
+        if (i === state.current) b.setAttribute('aria-current', 'step');
+        if (locked) b.setAttribute('aria-disabled', 'true');
+        if (done) b.classList.add('story__stop--done');
+        b.addEventListener('click', () => {
+          if (!locked && i !== state.current) goChapter(i);
+        });
+        li.appendChild(b);
+        journey.appendChild(li);
+      });
+    });
+
+  const renderPaths = () =>
+    keepFocus(paths, () => {
+      const chapter = CHAPTERS[state.current];
+      const areas = CHAPTER_AREAS[chapter.id];
+      paths.hidden = areas.length < 2;
+      paths.innerHTML = '';
+      for (const a of areas) {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'story__sign';
+        b.textContent = a.label;
+        if (a.id === area) b.setAttribute('aria-current', 'location');
+        b.addEventListener('click', () => goArea(a.id));
+        paths.appendChild(b);
+      }
+    });
 
   const renderBar = () => {
     const chapter = CHAPTERS[state.current];
@@ -184,6 +199,7 @@ export function mountStory(
       renderBar();
       syncHeight();
       mark();
+      chapterEl.focus({ preventScroll: true });
       ctx.audio.setAmbience(target.id);
       say(`${target.title}. ${target.intro}`);
     };
@@ -222,6 +238,7 @@ export function mountStory(
     const idx = chapterIndex(chapterOfArea(id));
     if (idx === state.current) goArea(id);
     else if (canVisit(state, idx)) goChapter(idx, id);
+    else ctx.announce(`${CHAPTERS[idx].title} is still locked. Finish the earlier chapters first.`);
   };
   window.addEventListener(OBJECTIVE_EVENT, onObjective);
   window.addEventListener(GOTO_EVENT, onGoto);
