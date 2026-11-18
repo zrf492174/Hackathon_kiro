@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { AudioManager, type AudioContextLike } from '../../src/core/audio';
+import {
+  AMBIENCE,
+  AudioManager,
+  ambienceMix,
+  humLevel,
+  transitionSound,
+  type AudioContextLike,
+} from '../../src/core/audio';
 
 function fakeCtx() {
   const calls = { resume: 0, suspend: 0, sources: 0, oscs: 0 };
@@ -150,5 +157,59 @@ describe('AudioManager', () => {
     m.stopAmbient();
     m.play('wind');
     expect(f.calls.sources).toBe(2);
+  });
+});
+
+describe('chapter ambience', () => {
+  it('mixes per chapter and gates the heartbeat behind scares', () => {
+    expect(ambienceMix('castle', false).rain).toBeGreaterThan(0);
+    expect(ambienceMix('castle', false).heartbeat).toBe(false);
+    expect(ambienceMix('castle', true).heartbeat).toBe(true);
+    expect(ambienceMix('gate', true).heartbeat).toBe(false);
+    expect(ambienceMix('grounds', false).wind).toBeGreaterThan(ambienceMix('archive', false).wind);
+    expect(ambienceMix('nowhere', true)).toMatchObject({
+      wind: 0,
+      rain: 0,
+      drone: 0,
+      heartbeat: false,
+    });
+    for (const id of Object.keys(AMBIENCE)) {
+      for (const e of AMBIENCE[id].events) expect(e).not.toBe('boo');
+    }
+  });
+
+  it('picks a transition sound and a hum level', () => {
+    expect(transitionSound('castle')).toBe('creak');
+    expect(transitionSound('grounds')).toBe('footsteps');
+    expect(humLevel(75, true)).toBe(0.75);
+    expect(humLevel('120', true)).toBe(1);
+    expect(humLevel(80, false)).toBe(0);
+    expect(humLevel('x', true)).toBe(0);
+  });
+
+  it('remembers the chapter before start and builds beds once after the gesture', async () => {
+    const f = fakeCtx();
+    const m = new AudioManager({ createContext: () => f.ctx });
+    m.setAmbience('castle');
+    expect(f.calls.sources).toBe(0);
+    await m.start();
+    expect(m.ambience).toBe('castle');
+    const sources = f.calls.sources;
+    expect(sources).toBe(2); // wind and rain noise beds
+    m.setAmbience('attic');
+    m.setHum(0.5);
+    expect(f.calls.sources).toBe(sources);
+    m.dispose();
+  });
+
+  it('new one-off sounds play once started', async () => {
+    const f = fakeCtx();
+    const m = new AudioManager({ createContext: () => f.ctx });
+    expect(m.play('owl')).toBe(false);
+    await m.start();
+    for (const s of ['owl', 'bell', 'timber', 'footsteps', 'latch'] as const) {
+      expect(m.play(s)).toBe(true);
+    }
+    m.dispose();
   });
 });

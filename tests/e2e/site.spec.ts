@@ -1,15 +1,11 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 
-async function enter(page: Page) {
-  await page.goto('./');
+async function enter(page: Page, hash = '') {
+  await page.goto(`./${hash ? '#' + hash : ''}`);
   await expect(page.getByRole('dialog')).toBeVisible();
   await page.getByRole('button', { name: 'Enter muted' }).click();
   await expect(page.getByRole('dialog')).toHaveCount(0);
-}
-
-async function goScene(page: Page, name: string) {
-  await page.locator('.scene-nav').getByRole('button', { name, exact: true }).click();
 }
 
 test('warning then enter shows the gate', async ({ page }) => {
@@ -27,8 +23,7 @@ test('mute toggle in settings', async ({ page }) => {
 });
 
 test('pumpkin click does not break the page', async ({ page }) => {
-  await enter(page);
-  await goScene(page, 'Pumpkin patch');
+  await enter(page, 'patch');
   const pumpkin = page.locator('.pumpkin').first();
   await pumpkin.click();
   await expect(pumpkin).toBeVisible();
@@ -87,13 +82,8 @@ async function axeClean(page: Page) {
   );
 }
 
-test('castle door leads to the library; pages turn by keyboard; DOI link is safe', async ({
-  page,
-}) => {
-  await enter(page);
-  await goScene(page, 'Castle');
-  expect(await axeClean(page)).toEqual([]);
-  await page.getByRole('button', { name: /drawbridge/i }).click();
+test('archive tabs; pages turn by keyboard; DOI link is safe', async ({ page }) => {
+  await enter(page, 'archive');
   await expect(page.locator('.grimoire__book .spell')).toBeVisible();
   const first = await page.locator('.spell__title').innerText();
   await page.keyboard.press('ArrowRight');
@@ -110,8 +100,7 @@ test('castle door leads to the library; pages turn by keyboard; DOI link is safe
 });
 
 test('lab lever toggles aria-pressed and is accessible', async ({ page }) => {
-  await enter(page);
-  await goScene(page, 'Laboratory');
+  await enter(page, 'lab');
   const lever = page.getByRole('button', { name: 'Pull the lever' });
   await expect(lever).toHaveAttribute('aria-pressed', 'false');
   await lever.click();
@@ -120,8 +109,8 @@ test('lab lever toggles aria-pressed and is accessible', async ({ page }) => {
 });
 
 test('gazette lists news with terms and axe passes', async ({ page }) => {
-  await enter(page);
-  await goScene(page, 'Gazette');
+  await enter(page, 'archive');
+  await page.getByRole('tab', { name: 'Gazette' }).click();
   await expect(page.locator('.gazette__item').first()).toBeVisible();
   await expect(page.locator('.gazette__lic').first()).toContainText('Terms');
   expect(await axeClean(page)).toEqual([]);
@@ -129,8 +118,7 @@ test('gazette lists news with terms and axe passes', async ({ page }) => {
 
 test('reduced motion stops window flicker', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  await enter(page);
-  await goScene(page, 'Castle');
+  await enter(page, 'castle');
   const anim = await page
     .locator('.castle__win')
     .first()
@@ -138,40 +126,119 @@ test('reduced motion stops window flicker', async ({ page }) => {
   expect(anim).toBe('none');
 });
 
-test('grouped nav reaches every scene with aria-current', async ({ page }) => {
+test('castle stair leads down to the laboratory within the chapter', async ({ page }) => {
+  await enter(page, 'castle');
+  expect(await axeClean(page)).toEqual([]);
+  await page.getByRole('button', { name: /stair down to the laboratory/i }).click();
+  await expect(page.locator('.scene-lab')).toBeVisible();
+  await expect(page.locator('.story__chapter')).toContainText('Chapter 4 of 5');
+  await page.getByRole('button', { name: 'Castle hall' }).click();
+  await expect(page.locator('.scene-castle')).toBeVisible();
+});
+
+test('archive has an accessible tablist for grimoires and gazette', async ({ page }) => {
+  await enter(page, 'archive');
+  const tabs = page.getByRole('tab');
+  await expect(tabs).toHaveCount(2);
+  await tabs.first().focus();
+  await page.keyboard.press('ArrowRight');
+  await expect(tabs.nth(1)).toHaveAttribute('aria-selected', 'true');
+  await expect(page.locator('.gazette__item').first()).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Open the collection book' })).toBeVisible();
+});
+
+test('no scene nav; story walks five chapters by keyboard and axe passes in each', async ({
+  page,
+}) => {
   await enter(page);
-  const nav = page.locator('.scene-nav');
-  await expect(nav.getByRole('group')).toHaveCount(2);
-  for (const n of [
-    'Gate',
-    'Pumpkin patch',
-    'Graveyard',
-    'Foggy Town',
-    'Attic',
-    'Castle',
-    'Laboratory',
-    'Library',
-    'Gazette',
-  ]) {
-    const b = nav.getByRole('button', { name: n, exact: true });
-    await b.click();
-    await expect(b).toHaveAttribute('aria-current', 'page');
-    const box = await b.boundingBox();
+  await expect(page.locator('.scene-nav')).toHaveCount(0);
+  const cont = page.locator('.story__continue');
+  const chapters = ['The Gate', 'The Grounds', 'The Attic', 'The Castle', 'The Archive'];
+  for (let i = 0; i < chapters.length; i++) {
+    await expect(page.locator('.story__chapter')).toHaveText(
+      `Chapter ${i + 1} of 5: ${chapters[i]}`,
+    );
+    await expect(page.locator('.story__journey [aria-current="step"]')).toHaveAttribute(
+      'aria-label',
+      new RegExp(`Chapter ${i + 1}:`),
+    );
+    const box = await cont.boundingBox();
     expect(box?.height).toBeGreaterThanOrEqual(44);
+    expect(await axeClean(page)).toEqual([]);
+    if (i < chapters.length - 1) {
+      await cont.focus();
+      await page.keyboard.press('Enter');
+    }
   }
+  // locked chapters are disabled, reached ones can be revisited
+  await page.locator('.story__journey button').first().click();
+  await expect(page.locator('.story__chapter')).toContainText('Chapter 1 of 5');
+  await expect(page.locator('.story__journey button').nth(4)).not.toHaveAttribute(
+    'aria-disabled',
+    'true',
+  );
+});
+
+test('objectives complete from the real interactions and mark the continue button ready', async ({
+  page,
+}) => {
+  await enter(page);
+  const cont = page.locator('.story__continue');
+  await expect(cont).toHaveAttribute('data-ready', 'false');
+  await expect(cont).toHaveText('Press on anyway');
+  await page.getByRole('button', { name: 'Lift the latch' }).click();
+  await expect(cont).toHaveAttribute('data-ready', 'true');
+  await cont.click();
+  await expect(page.locator('.story__chapter')).toContainText('The Grounds');
+  for (const n of [3, 1, 5, 2, 4]) {
+    await page.getByRole('button', { name: new RegExp(`^Pumpkin ${n},`) }).click();
+  }
+  await expect(cont).toHaveAttribute('data-ready', 'true');
+});
+
+test('blowing out all candles marks the attic ready', async ({ page }) => {
+  await enter(page, 'attic');
+  const cont = page.locator('.story__continue');
+  await expect(cont).toHaveAttribute('data-ready', 'false');
+  for (const n of [1, 2, 3]) {
+    await page.getByRole('button', { name: new RegExp(`^Candle ${n},`) }).click();
+  }
+  await expect(cont).toHaveAttribute('data-ready', 'true');
+});
+
+test('waking the lab creature marks the castle ready', async ({ page }) => {
+  await enter(page, 'lab');
+  const cont = page.locator('.story__continue');
+  await expect(cont).toHaveAttribute('data-ready', 'false');
+  await page.getByRole('button', { name: 'Pull the lever' }).click();
+  await page.getByLabel('Voltage').fill('75');
+  await expect(cont).toHaveAttribute('data-ready', 'true');
+});
+
+test('turning a grimoire page marks the archive ready', async ({ page }) => {
+  await enter(page, 'archive');
+  const cont = page.locator('.story__continue');
+  await expect(cont).toHaveAttribute('data-ready', 'false');
+  await page.getByRole('tab', { name: 'Grimoires' }).click();
+  await page.getByRole('button', { name: 'Next page' }).click();
+  await expect(cont).toHaveAttribute('data-ready', 'true');
+});
+
+test('legacy hashes open the merged chapter', async ({ page }) => {
+  await enter(page, 'library');
+  await expect(page.locator('.story__chapter')).toContainText('The Archive');
+  await expect(page.getByRole('tab', { name: 'Grimoires' })).toBeVisible();
 });
 
 test('graveyard tombstone reveals an epitaph; axe passes', async ({ page }) => {
-  await enter(page);
-  await goScene(page, 'Graveyard');
+  await enter(page, 'graveyard');
   await page.getByRole('button', { name: 'Tombstone of Mirabel Thorne', exact: false }).click();
   await expect(page.locator('.yard__epitaph')).toContainText('Please stop knocking');
   expect(await axeClean(page)).toEqual([]);
 });
 
 test('horror homage figure is a keyboard button', async ({ page }) => {
-  await enter(page);
-  await goScene(page, 'Castle');
+  await enter(page, 'castle');
   const f = page.getByRole('button', { name: 'Caped gentleman silhouette' });
   await f.focus();
   await page.keyboard.press('Enter');
@@ -179,8 +246,7 @@ test('horror homage figure is a keyboard button', async ({ page }) => {
 });
 
 test('lab voltage control and lever', async ({ page }) => {
-  await enter(page);
-  await goScene(page, 'Laboratory');
+  await enter(page, 'lab');
   const volt = page.getByLabel('Voltage');
   await volt.fill('100');
   const lever = page.getByRole('button', { name: 'Pull the lever' });
@@ -196,8 +262,7 @@ test('lab voltage control and lever', async ({ page }) => {
 });
 
 test('lab creature sits up above 70 and lies down at 70', async ({ page }) => {
-  await enter(page);
-  await goScene(page, 'Laboratory');
+  await enter(page, 'lab');
   const stage = page.locator('.scene-lab');
   await page.getByRole('button', { name: 'Pull the lever' }).click();
   await page.getByLabel('Voltage').fill('75');
@@ -210,8 +275,7 @@ test('lab creature sits up above 70 and lies down at 70', async ({ page }) => {
 });
 
 test('foggy town reveals a creature and axe passes', async ({ page }) => {
-  await enter(page);
-  await goScene(page, 'Foggy Town');
+  await enter(page, 'fog');
   await page.getByRole('button', { name: 'Listen' }).click();
   await expect(page.locator('.creature--shown')).toHaveCount(1);
   await expect(page.locator('.town__status')).not.toBeEmpty();
@@ -219,21 +283,33 @@ test('foggy town reveals a creature and axe passes', async ({ page }) => {
 });
 
 test('gazette has an aged gradient background', async ({ page }) => {
-  await enter(page);
-  await goScene(page, 'Gazette');
+  await enter(page, 'archive');
+  await page.getByRole('tab', { name: 'Gazette' }).click();
   const bg = await page.locator('.gazette').evaluate((e) => getComputedStyle(e).backgroundImage);
   expect(bg).toContain('gradient');
 });
 
 test('reduced motion keeps new scenes static', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  await enter(page);
-  await goScene(page, 'Foggy Town');
+  await enter(page, 'fog');
   expect(
     await page.locator('.town__fog--a').evaluate((e) => getComputedStyle(e).animationName),
   ).toBe('none');
-  await goScene(page, 'Graveyard');
+  await page.getByRole('button', { name: 'Churchyard' }).click();
   expect(await page.locator('.yard__mist').evaluate((e) => getComputedStyle(e).animationName)).toBe(
     'none',
   );
+});
+
+test('reduced motion keeps grain, light flicker and parallax still', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await enter(page, 'attic');
+  const anim = (sel: string) =>
+    page.locator(sel).evaluate((e) => getComputedStyle(e).animationName);
+  expect(await anim('.grain')).toBe('none');
+  expect(await anim('.light__pool')).toBe('none');
+  await page.mouse.move(10, 10);
+  await page.mouse.move(600, 400);
+  expect(await page.locator('#fog').evaluate((e) => getComputedStyle(e).transform)).toBe('none');
+  await expect(page.locator('.loft__svg')).toBeVisible();
 });

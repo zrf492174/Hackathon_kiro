@@ -1,4 +1,5 @@
 import { figureMotionAllowed } from './gating';
+import { signal } from '../story/events';
 import type { Interaction } from './types';
 
 /** The creature rises only when voltage is strictly above this value (and the lever is on). */
@@ -147,6 +148,7 @@ export const labMonster: Interaction = {
         }
       }
       ctx.announce(msg);
+      if (phase !== 'lying') signal('creature-awake');
       run();
     }
     function sync() {

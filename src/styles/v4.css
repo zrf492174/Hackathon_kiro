@@ -1,31 +1,5 @@
 /* v4: grouped nav, homage figures, graveyard, laboratory, foggy town, aged gazette. */
 
-/* ---- Grouped scene nav ---- */
-.scene-nav {
-  flex-direction: column;
-  gap: 0.25rem;
-  max-width: calc(100vw - 1.5rem);
-}
-.scene-nav__group {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.3rem;
-  padding: 0.2rem 0.4rem;
-  background: rgba(10, 6, 20, 0.82);
-  border: 1px solid #3a2a5a;
-}
-.scene-nav__title {
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #d9cde8;
-  min-width: 4.5rem;
-}
-.scene-nav button {
-  padding: 0 0.6rem;
-  font-size: 0.9rem;
-}
 .gate__hint {
   position: fixed;
   top: 3.5rem;
@@ -125,7 +99,7 @@
 .yard {
   position: fixed;
   inset: 0;
-  z-index: -1;
+  z-index: 0;
 }
 .yard__svg {
   width: 100%;
@@ -152,7 +126,7 @@
   position: fixed;
   left: 0;
   right: 0;
-  bottom: 8.5rem;
+  bottom: calc(var(--story-h, 7rem) + 4rem);
   display: flex;
   justify-content: center;
   align-items: flex-end;
@@ -237,7 +211,7 @@
 .yard__epitaph {
   position: fixed;
   left: 50%;
-  bottom: 5.5rem;
+  bottom: calc(var(--story-h, 7rem) + 1.5rem);
   transform: translateX(-50%);
   margin: 0;
   padding: 0.4rem 0.9rem;
@@ -376,7 +350,7 @@
 .town {
   position: fixed;
   inset: 0;
-  z-index: -1;
+  z-index: 0;
   overflow: hidden;
 }
 .town__svg {
@@ -609,7 +583,8 @@
   inset: 0;
   overflow-y: auto;
   box-sizing: border-box;
-  padding-bottom: 13rem;
+  padding-bottom: calc(var(--story-h, 7rem) + 6rem);
+  z-index: 3;
 }
 .figure--werewolf svg {
   filter: drop-shadow(0 0 3px #b9a7e0) drop-shadow(0 0 8px rgba(185, 167, 224, 0.6));

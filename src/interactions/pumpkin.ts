@@ -1,4 +1,5 @@
 import { PumpkinPuzzle } from './pumpkinPuzzle';
+import { signal } from '../story/events';
 import type { Interaction, InteractionContext } from './types';
 
 let row: HTMLElement | null = null;
@@ -41,6 +42,7 @@ export const pumpkin: Interaction = {
           ctx.addScore(50);
           for (const u of urls) ctx.discover?.(u);
           ctx.root.querySelector('.hidden-door')?.removeAttribute('hidden');
+          signal('pumpkins-lit');
         }
       });
       buttons.push(b);

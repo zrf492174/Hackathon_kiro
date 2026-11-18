@@ -10,9 +10,9 @@ export const castleDoor: Interaction = {
     const b = document.createElement('button');
     b.type = 'button';
     b.className = 'castle__door';
-    b.textContent = 'Cross the drawbridge to the library';
+    b.textContent = 'Take the stair down to the laboratory';
     b.addEventListener('click', () =>
-      window.dispatchEvent(new CustomEvent(GOTO_EVENT, { detail: 'library' })),
+      window.dispatchEvent(new CustomEvent(GOTO_EVENT, { detail: 'lab' })),
     );
     ctx.root.appendChild(b);
     btn = b;

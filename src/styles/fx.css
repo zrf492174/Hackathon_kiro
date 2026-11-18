@@ -41,7 +41,7 @@
 /* Candle flicker: irregular, slow, low amplitude (well under 3 Hz) */
 .candle {
   position: fixed;
-  bottom: 1.5rem;
+  bottom: calc(var(--story-h, 7rem) + 1.5rem);
   left: 1.5rem;
   width: 14px;
   height: 28px;

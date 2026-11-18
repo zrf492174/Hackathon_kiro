@@ -1,0 +1,218 @@
+/*
+ * Atmosphere: per-chapter light, fog depth, parallax, textures and contact shadows.
+ * All original CSS and inline SVG filters. Layers: backdrops z 0, fog z 1, light z 2, controls above.
+ */
+:root {
+  --px: 0;
+  --py: 0;
+}
+
+#fog {
+  opacity: 0.85;
+  transform: translate(calc(var(--px) * -10px), calc(var(--py) * -4px)) scale(1.03);
+  transition: transform 0.6s ease-out;
+}
+
+/* ---- Light model ---- */
+.light {
+  z-index: 2;
+  overflow: hidden;
+  mix-blend-mode: screen;
+}
+.light::before,
+.light__pool {
+  content: '';
+  position: absolute;
+  inset: -4%;
+  transform: translate(calc(var(--px) * 14px), calc(var(--py) * 8px));
+  transition: transform 0.6s ease-out;
+}
+/* Cool moonlight from the upper right, shared by the outdoor chapters. */
+.light::before {
+  background: radial-gradient(
+    ellipse 55% 45% at 88% 6%,
+    rgba(150, 175, 230, 0.2),
+    rgba(150, 175, 230, 0.06) 45%,
+    transparent 70%
+  );
+}
+/* Warm pools: lamps, lanterns and candles. They breathe slowly, never flash. */
+.light__pool {
+  animation: light-breathe 5.3s ease-in-out infinite;
+}
+@keyframes light-breathe {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  23% {
+    opacity: 0.86;
+  }
+  41% {
+    opacity: 0.95;
+  }
+  67% {
+    opacity: 0.82;
+  }
+  84% {
+    opacity: 0.97;
+  }
+}
+:root[data-chapter='gate'] .light__pool {
+  background: radial-gradient(ellipse 22% 30% at 6% 82%, rgba(255, 170, 80, 0.22), transparent 70%);
+}
+:root[data-chapter='grounds'] .light__pool {
+  background:
+    radial-gradient(ellipse 40% 18% at 50% 80%, rgba(255, 130, 40, 0.18), transparent 70%),
+    radial-gradient(ellipse 26% 42% at 14% 55%, rgba(255, 180, 90, 0.16), transparent 72%);
+}
+:root[data-chapter='attic'] .light::before {
+  background: none;
+}
+:root[data-chapter='attic'] .light__pool {
+  background: radial-gradient(
+    ellipse 38% 42% at 50% 86%,
+    rgba(255, 175, 80, 0.26),
+    rgba(255, 140, 50, 0.08) 50%,
+    transparent 75%
+  );
+}
+:root[data-chapter='castle'] .light::before {
+  background:
+    radial-gradient(ellipse 50% 40% at 50% 18%, rgba(130, 170, 255, 0.14), transparent 70%),
+    radial-gradient(ellipse 55% 45% at 88% 6%, rgba(150, 175, 230, 0.18), transparent 70%);
+}
+:root[data-chapter='castle'] .light__pool {
+  background: radial-gradient(
+    ellipse 30% 22% at 50% 66%,
+    rgba(160, 220, 255, 0.1),
+    transparent 70%
+  );
+}
+:root[data-chapter='archive'] .light::before {
+  background: none;
+}
+:root[data-chapter='archive'] .light__pool {
+  background: radial-gradient(
+    ellipse 50% 38% at 50% 8%,
+    rgba(255, 200, 120, 0.2),
+    rgba(255, 170, 90, 0.06) 50%,
+    transparent 75%
+  );
+}
+
+/* Heavier vignette indoors, lighter on open ground. */
+:root[data-chapter='attic'] .vignette {
+  background: radial-gradient(ellipse at 50% 80%, transparent 25%, rgba(0, 0, 0, 0.92) 100%);
+}
+:root[data-chapter='archive'] .vignette {
+  background: radial-gradient(ellipse at 50% 20%, transparent 40%, rgba(0, 0, 0, 0.8) 100%);
+}
+:root[data-chapter='grounds'] .vignette {
+  background: radial-gradient(ellipse at 50% 60%, transparent 45%, rgba(0, 0, 0, 0.85) 100%);
+}
+
+/* Film grain: a little stronger, slower (about 2 changes per second, well under 3 Hz). */
+.grain {
+  opacity: 0.09;
+  animation-duration: 1.5s;
+}
+
+/* ---- Depth of field: far layers are softer ---- */
+.yard__far,
+.town__svg > g:first-of-type {
+  filter: blur(1.4px);
+}
+.gate__moon {
+  filter: blur(0.6px);
+}
+
+/* ---- Contact shadows ---- */
+.pumpkin,
+.candle-btn,
+.stone {
+  position: relative;
+}
+.pumpkin::after,
+.candle-btn::after,
+.stone::after {
+  content: '';
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  bottom: -6px;
+  height: 10px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.7), transparent 70%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* ---- Textures (inline SVG feTurbulence, no external files) ---- */
+.gate__note,
+.attic__letter {
+  background-image:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='120'><filter id='p'><feTurbulence type='fractalNoise' baseFrequency='0.04 0.6' numOctaves='3' seed='4'/><feColorMatrix values='0 0 0 0 0.35  0 0 0 0 0.24  0 0 0 0 0.1  0 0 0 0.35 0'/></filter><rect width='100%' height='100%' filter='url(%23p)'/></svg>"),
+    radial-gradient(ellipse at 20% 20%, rgba(120, 80, 30, 0.25), transparent 60%),
+    radial-gradient(ellipse at 85% 90%, rgba(90, 55, 20, 0.35), transparent 55%);
+}
+.story__sign {
+  background-image:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='60'><filter id='w'><feTurbulence type='fractalNoise' baseFrequency='0.01 0.35' numOctaves='2' seed='7'/><feColorMatrix values='0 0 0 0 0.1  0 0 0 0 0.05  0 0 0 0 0.02  0 0 0 0.45 0'/></filter><rect width='100%' height='100%' filter='url(%23w)'/></svg>"),
+    linear-gradient(180deg, #4a2f1a, #34200f);
+}
+.story__sign[aria-current='location'] {
+  background-image:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='60'><filter id='w'><feTurbulence type='fractalNoise' baseFrequency='0.01 0.35' numOctaves='2' seed='7'/><feColorMatrix values='0 0 0 0 0.3  0 0 0 0 0.18  0 0 0 0 0.06  0 0 0 0.35 0'/></filter><rect width='100%' height='100%' filter='url(%23w)'/></svg>"),
+    linear-gradient(180deg, #e0b074, #c48a4c);
+}
+
+/* ---- Motion off: everything above stays still ---- */
+:root[data-reduced-motion='true'] #fog,
+:root[data-safe-mode='true'] #fog,
+:root[data-reduced-motion='true'] .light::before,
+:root[data-safe-mode='true'] .light::before,
+:root[data-reduced-motion='true'] .light__pool,
+:root[data-safe-mode='true'] .light__pool {
+  transform: none;
+  transition: none;
+  animation: none;
+}
+
+/* ---- Attic backdrop ---- */
+.loft {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+}
+.loft__svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.attic__letter {
+  top: 7rem;
+}
+
+@media (max-width: 719px) {
+  .town__controls {
+    top: auto;
+    left: 0.75rem;
+    right: 0.75rem;
+    bottom: calc(var(--story-h, 7rem) + 0.5rem);
+    max-width: none;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.3rem;
+    padding: 0.4rem 0.5rem;
+  }
+  .town__density,
+  .town__status {
+    grid-column: 1 / -1;
+    margin: 0;
+  }
+  .town__btn {
+    min-height: 44px;
+    font-size: 0.85rem;
+  }
+}

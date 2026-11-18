@@ -15,7 +15,7 @@ import {
   pointerNear,
 } from '../../src/interactions/fogCreatures';
 import { STONES, epitaphText, stoneById } from '../../src/interactions/graveyardStones';
-import { SCENES, SCENE_GROUPS, parseSceneId } from '../../src/scenes';
+import { CHAPTER_AREAS, SCENES, parseSceneId } from '../../src/scenes';
 import { DEFAULT_SETTINGS, type Settings } from '../../src/core/settings';
 
 const s = (p: Partial<Settings> = {}): Settings => ({ ...DEFAULT_SETTINGS, ...p });
@@ -78,9 +78,9 @@ describe('v4 registries', () => {
     expect(epitaphText(stoneById('b')!)).toContain('Mirabel');
     expect(stoneById('zzz')).toBeUndefined();
   });
-  it('nav groups cover all scenes including fog', () => {
-    expect(SCENE_GROUPS).toHaveLength(2);
-    expect(SCENES).toHaveLength(9);
+  it('chapter areas cover the grounds including fog', () => {
+    expect(Object.keys(CHAPTER_AREAS)).toHaveLength(5);
+    expect(SCENES).toHaveLength(8);
     expect(parseSceneId('#fog')).toBe('fog');
   });
 });

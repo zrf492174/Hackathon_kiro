@@ -1,3 +1,4 @@
+import { signal } from '../story/events';
 import type { Interaction, InteractionContext } from './types';
 
 const COUNT = 3;
@@ -25,6 +26,7 @@ export const candles: Interaction = {
     const timers = new Set<ReturnType<typeof setTimeout>>();
     const apply = () => {
       const n = lit.filter(Boolean).length;
+      if (n === 0) signal('candles-out');
       document.documentElement.style.setProperty('--brightness', String(brightnessFor(n)));
       lit.forEach((on, i) => {
         buttons[i].setAttribute('aria-pressed', String(!on));
